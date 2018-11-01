@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DevEngagement</string>
+    <string name="notification_alert_without_push">You have a new notification</string>
+</resources>

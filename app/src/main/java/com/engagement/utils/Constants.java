@@ -1,0 +1,41 @@
+package com.engagement.utils;
+
+
+public class Constants {
+
+
+    public static final String PUSH_NOTIFICATION_ALERT = "alert";
+    public static final String MESSAGE_KEY_TYPE_PLATFORM = "is_hero_platform";
+    public static final String MESSAGE_KEY_TYPE_SILENT = "is_silent";
+    public static final String LOGIN_USER_EMAIL_KEY = "user_email";
+    public static final String API_RESPONSE_META_KEY = "meta";
+    public static final String API_RESPONSE_CODE_KEY = "code";
+    public static final String API_RESPONSE_DATA_KEY = "data";
+    public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
+    public static final String DEFAULT_CHANNEL_TITLE = "Default Channel";
+    public static final String API_RESPONSE_USER_DATA_KEY = "userData";
+    public static final String API_RESPONSE_USER_EMAIL_KEY = "email";
+    public static final String API_RESPONSE_USER_TOKEN_KEY = "user_token";
+    public static final String API_RESPONSE_MESSAGE_KEY = "message";
+    public static final String API_RESPONSE_ERROR_KEY = "errors";
+    public static final String LOGIN_USER_ID_KEY = "user_id";
+    public static final String DEFAULT_IMAGES_DIRECTORY_NAME = "drawable";
+    public static final String MESSAGE_KEY_TYPE_DATA = "data";
+    public static final String MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK = "inapp_view_link";
+    public static final String MESSAGE_KEY_TYPE_CAMPAIGN_TYPE = "campaign_type";
+    public static final String MESSAGE_KEY_TYPE_MESSAGE_TYPE = "message_type";
+    public static final String MESSAGE_KEY_TYPE_POSITION = "position";
+    public static final String MESSAGE_KEY_TYPE_PUSH = "push";
+    public static final String MESSAGE_KEY_TYPE_DIALOG = "dialogue";
+    public static final String POSITION_TOP = "top";
+    public static final String POSITION_BOTTOM = "bottom";
+    public static final String POSITION_MIDDLE = "middle";
+    public static final String POSITION_FULL = "full";
+    public static final String LOGIN_USER_SESSION_TOKEN_KEY = "authToken";
+    public static final int EXPIRE_TIME = 5;
+    public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
+    public static final String PUSH_NOTIFICATION_DATA = "push_notification_data";
+    public static final String SERVER_OK_REQUEST_CODE = "200";
+
+
+}

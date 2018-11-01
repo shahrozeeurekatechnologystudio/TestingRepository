@@ -1,0 +1,49 @@
+<resources>
+
+
+    <style name="engagement_translateDialogAnimation_slow">
+        <item name="android:windowEnterAnimation">@anim/anim_translate_in_slow</item>
+        <item name="android:windowExitAnimation">@anim/anim_translate_out_slow</item>
+    </style>
+    <style name="engagement_translateDialogAnimation_slow_bottom">
+        <item name="android:windowEnterAnimation">@anim/anim_translate_in_slow_bottom</item>
+        <item name="android:windowExitAnimation">@anim/anim_translate_out_slow_bottom</item>
+    </style>
+    <style name="CustomTextAppearance">
+        <item name="android:typeface">monospace</item>
+    </style>
+    <style name="EditTextAppearance" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/CustomTextAppearance</item>
+    </style>
+    <style name="engagement_dialog_style_animation_top_bottom" parent="Base.Theme.AppCompat.Dialog">
+
+
+    </style>
+
+    <style name="engagement_dialog_style_animation" parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="android:textViewStyle">@style/CustomTextAppearance</item>
+        <item name="android:buttonStyle">@style/CustomTextAppearance</item>
+        <item name="android:editTextStyle">@style/EditTextAppearance</item>
+        <item name="android:textAppearance">@style/CustomTextAppearance</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">stateUnchanged</item>
+        <item name="android:windowAnimationStyle">@style/engagement_PauseDialogAnimation</item>
+        <item name="colorPrimary">@color/transparent</item>
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="colorAccent">@color/transparent</item>
+    </style>
+
+    <style name="engagement_PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/animate_in_top</item>
+        <item name="android:windowExitAnimation">@anim/animate_out_top</item>
+    </style>
+
+
+</resources>
+
+

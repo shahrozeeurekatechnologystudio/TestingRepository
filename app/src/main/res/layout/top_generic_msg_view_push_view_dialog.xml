@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_Notification_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_blue"
+        android:clickable="true"
+        android:elevation="@dimen/d_3"
+        android:minHeight="@dimen/d_40"
+      >
+
+        <ImageView
+            android:id="@+id/iv_push"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:src="@mipmap/ic_tick_white" />
+
+        <TextView
+            android:id="@+id/tv_push"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@+id/iv_push"
+            android:layout_toRightOf="@+id/iv_push"
+            android:autoLink="all"
+            android:gravity="center_vertical|start|left"
+            android:lineSpacingExtra="@dimen/d_1_50"
+            android:paddingTop="@dimen/d_3"
+            android:paddingBottom="@dimen/d_3"
+            android:textColor="@color/color_white"
+            android:textColorLink="@color/color_blue_dark"
+            android:textSize="@dimen/t_title_2"
+            android:typeface="sans" />
+
+    </RelativeLayout>
