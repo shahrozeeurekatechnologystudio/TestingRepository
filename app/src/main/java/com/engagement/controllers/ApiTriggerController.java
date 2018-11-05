@@ -9,7 +9,6 @@ import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
-import com.engagement.utils.LoginUserInfo;
 
 import org.json.JSONObject;
 
@@ -25,16 +24,18 @@ public class ApiTriggerController {
         return instance;
     }
 
-    public void registerTriggerAction(String userID, String campaignCode, JSONObject extraParams, UserActionsListener userActionsListener) {
-        registerTriggerActionRestCalls(userID, campaignCode, extraParams, userActionsListener);
+    public void registerTriggerAction(String campaignCode, JSONObject extraParams, UserActionsListener userActionsListener) {
+        registerTriggerActionRestCalls(campaignCode, extraParams, userActionsListener);
     }
 
-    private void registerTriggerActionRestCalls(String userID, String campaignCode, JSONObject extraParams, UserActionsListener userActionsListener) {
+    private void registerTriggerActionRestCalls(String campaignCode, JSONObject extraParams, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
-            if (userID != null && !userID.equalsIgnoreCase("")) {
-                params.put("user_id", userID);
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
+                    params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
             }
             if (campaignCode != null && !campaignCode.equalsIgnoreCase("")) {
                 params.put("campaign_code", campaignCode);
@@ -70,12 +71,6 @@ public class ApiTriggerController {
                 try {
                     if (response.getJSONObject(Constants.API_RESPONSE_META_KEY).getString(Constants.API_RESPONSE_CODE_KEY).toString()
                             .equalsIgnoreCase(Constants.SERVER_OK_REQUEST_CODE)) {
-                        if (response.getJSONObject(Constants.API_RESPONSE_DATA_KEY) != null &&
-                                response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY) != null
-                                && response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY).get(Constants.API_RESPONSE_USER_TOKEN_KEY) != null
-                                && response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY).get(Constants.API_RESPONSE_USER_TOKEN_KEY).toString() != null) {
-                            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY).get(Constants.API_RESPONSE_USER_TOKEN_KEY).toString());
-                        }
                         if (userActionsListener != null) {
                             userActionsListener.onCompleted(response);
                         }

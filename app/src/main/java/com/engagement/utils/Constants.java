@@ -36,6 +36,8 @@ public class Constants {
     public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
     public static final String PUSH_NOTIFICATION_DATA = "push_notification_data";
     public static final String SERVER_OK_REQUEST_CODE = "200";
+    public static final String CAMPAIGN_RECEIVE_DATE = "campaign_receive_date";
+    public static final String TRACK_KEY = "track_key";
 
 
 }

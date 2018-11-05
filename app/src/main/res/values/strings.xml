@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">DevEngagement</string>
     <string name="notification_alert_without_push">You have a new notification</string>
+    <string name="no_campaign_receive_yet">"No Campaign Receive Yet"</string>
 </resources>

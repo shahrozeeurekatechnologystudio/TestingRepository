@@ -24,16 +24,18 @@ public class GetConversionActionsListController {
         return instance;
     }
 
-    public void getConversionActionsListController(String userID, String data_type, UserActionsListener userActionsListener) {
-        getConversionActionsListControllerRestCalls(userID, data_type, userActionsListener);
+    public void getConversionActionsListController(String data_type, UserActionsListener userActionsListener) {
+        getConversionActionsListControllerRestCalls(data_type, userActionsListener);
     }
 
-    private void getConversionActionsListControllerRestCalls(String userID, String data_type, UserActionsListener userActionsListener) {
+    private void getConversionActionsListControllerRestCalls(String data_type, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
-            if (userID != null && !userID.equalsIgnoreCase("")) {
-                params.put("user_id", userID);
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
+                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
             }
             if (data_type != null && !data_type.equalsIgnoreCase("")) {
                 params.put("data_type", data_type);

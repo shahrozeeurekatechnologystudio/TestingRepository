@@ -24,19 +24,21 @@ public class NewsFeedController {
         return instance;
     }
 
-    public void getNewsFeedController(String template,String user_id, String latitude,String longitude, UserActionsListener userActionsListener) {
-        getNewsFeedControllerRestCalls(template, user_id,latitude, longitude,userActionsListener);
+    public void getNewsFeedController(String template, String latitude,String longitude, UserActionsListener userActionsListener) {
+        getNewsFeedControllerRestCalls(template,latitude, longitude,userActionsListener);
     }
 
-    private void getNewsFeedControllerRestCalls(String template,String user_id, String latitude,String longitude, UserActionsListener userActionsListener) {
+    private void getNewsFeedControllerRestCalls(String template, String latitude,String longitude, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
             if (template != null && !template.equalsIgnoreCase("")) {
                 params.put("template", template);
             }
-            if (user_id != null && !user_id.equalsIgnoreCase("")) {
-                params.put("user_id", user_id);
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
+                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
             }
             if (latitude != null && !latitude.equalsIgnoreCase("")) {
                 params.put("latitude", latitude);

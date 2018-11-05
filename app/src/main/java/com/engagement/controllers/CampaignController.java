@@ -21,7 +21,11 @@ import com.engagement.utils.Constants;
 import com.engagement.utils.LoginUserInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -79,6 +83,17 @@ public class CampaignController {
                                 setEngagementMessageShowingInAppAndPush(messageBody);
                             } else {
                                 showNotification(context, messageBody, cls, notificationStatusBarIcon);
+                            }
+                            try {
+                                if (notificationJson != null && notificationJson.has("track_key") && notificationJson.get("track_key") != null && notificationJson.getString("track_key") != null
+                                        ) {
+                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, notificationJson.getString("track_key"));
+                                }
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }
