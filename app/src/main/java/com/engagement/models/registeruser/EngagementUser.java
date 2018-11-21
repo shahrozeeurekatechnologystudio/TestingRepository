@@ -16,6 +16,7 @@ public class EngagementUser implements Parcelable {
     private String companyKey;
     private String email;
     private String emailNotificationSubscription;
+    private String pushNotificationBarHideTimeInMilliseconds;
     private String country;
     private boolean isActive;
     private String phoneNumber;
@@ -25,7 +26,10 @@ public class EngagementUser implements Parcelable {
     private String pushNotificationHeaderImage;
     private String imagesDirectoryName;
     private String pushNotificationHeaderBackgroundColor;
-    private String pushNotificationHeaderTextColor;
+    private String pushNotificationHeaderTitleTextColor;
+    private String pushNotificationHeaderTitleTextSize;
+    private String pushNotificationHeaderBodyTextColor;
+    private String pushNotificationHeaderBodyTextSize;
 
 
     public String getFirstName() {
@@ -170,13 +174,7 @@ public class EngagementUser implements Parcelable {
         this.pushNotificationHeaderBackgroundColor = pushNotificationHeaderBackgroundColor;
     }
 
-    public String getPushNotificationHeaderTextColor() {
-        return pushNotificationHeaderTextColor;
-    }
 
-    public void setPushNotificationHeaderTextColor(String pushNotificationHeaderTextColor) {
-        this.pushNotificationHeaderTextColor = pushNotificationHeaderTextColor;
-    }
 
     public String getImagesDirectoryName() {
         return imagesDirectoryName;
@@ -186,6 +184,45 @@ public class EngagementUser implements Parcelable {
         this.imagesDirectoryName = imagesDirectoryName;
     }
 
+    public String getPushNotificationBarHideTimeInMilliseconds() {
+        return pushNotificationBarHideTimeInMilliseconds;
+    }
+
+    public void setPushNotificationBarHideTimeInMilliseconds(String pushNotificationBarHideTimeInMilliseconds) {
+        this.pushNotificationBarHideTimeInMilliseconds = pushNotificationBarHideTimeInMilliseconds;
+    }
+
+    public String getPushNotificationHeaderTitleTextColor() {
+        return pushNotificationHeaderTitleTextColor;
+    }
+
+    public void setPushNotificationHeaderTitleTextColor(String pushNotificationHeaderTitleTextColor) {
+        this.pushNotificationHeaderTitleTextColor = pushNotificationHeaderTitleTextColor;
+    }
+
+    public String getPushNotificationHeaderTitleTextSize() {
+        return pushNotificationHeaderTitleTextSize;
+    }
+
+    public void setPushNotificationHeaderTitleTextSize(String pushNotificationHeaderTitleTextSize) {
+        this.pushNotificationHeaderTitleTextSize = pushNotificationHeaderTitleTextSize;
+    }
+
+    public String getPushNotificationHeaderBodyTextColor() {
+        return pushNotificationHeaderBodyTextColor;
+    }
+
+    public void setPushNotificationHeaderBodyTextColor(String pushNotificationHeaderBodyTextColor) {
+        this.pushNotificationHeaderBodyTextColor = pushNotificationHeaderBodyTextColor;
+    }
+
+    public String getPushNotificationHeaderBodyTextSize() {
+        return pushNotificationHeaderBodyTextSize;
+    }
+
+    public void setPushNotificationHeaderBodyTextSize(String pushNotificationHeaderBodyTextSize) {
+        this.pushNotificationHeaderBodyTextSize = pushNotificationHeaderBodyTextSize;
+    }
 
     @Override
     public String toString() {
@@ -198,6 +235,7 @@ public class EngagementUser implements Parcelable {
                 ", companyKey='" + companyKey + '\'' +
                 ", email='" + email + '\'' +
                 ", emailNotificationSubscription='" + emailNotificationSubscription + '\'' +
+                ", pushNotificationBarHideTimeInMilliseconds='" + pushNotificationBarHideTimeInMilliseconds + '\'' +
                 ", country='" + country + '\'' +
                 ", isActive=" + isActive +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -207,7 +245,10 @@ public class EngagementUser implements Parcelable {
                 ", pushNotificationHeaderImage='" + pushNotificationHeaderImage + '\'' +
                 ", imagesDirectoryName='" + imagesDirectoryName + '\'' +
                 ", pushNotificationHeaderBackgroundColor='" + pushNotificationHeaderBackgroundColor + '\'' +
-                ", pushNotificationHeaderTextColor='" + pushNotificationHeaderTextColor + '\'' +
+                ", pushNotificationHeaderTitleTextColor='" + pushNotificationHeaderTitleTextColor + '\'' +
+                ", pushNotificationHeaderTitleTextSize='" + pushNotificationHeaderTitleTextSize + '\'' +
+                ", pushNotificationHeaderBodyTextColor='" + pushNotificationHeaderBodyTextColor + '\'' +
+                ", pushNotificationHeaderBodyTextSize='" + pushNotificationHeaderBodyTextSize + '\'' +
                 '}';
     }
 
@@ -227,6 +268,7 @@ public class EngagementUser implements Parcelable {
         dest.writeString(this.companyKey);
         dest.writeString(this.email);
         dest.writeString(this.emailNotificationSubscription);
+        dest.writeString(this.pushNotificationBarHideTimeInMilliseconds);
         dest.writeString(this.country);
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
         dest.writeString(this.phoneNumber);
@@ -236,7 +278,10 @@ public class EngagementUser implements Parcelable {
         dest.writeString(this.pushNotificationHeaderImage);
         dest.writeString(this.imagesDirectoryName);
         dest.writeString(this.pushNotificationHeaderBackgroundColor);
-        dest.writeString(this.pushNotificationHeaderTextColor);
+        dest.writeString(this.pushNotificationHeaderTitleTextColor);
+        dest.writeString(this.pushNotificationHeaderTitleTextSize);
+        dest.writeString(this.pushNotificationHeaderBodyTextColor);
+        dest.writeString(this.pushNotificationHeaderBodyTextSize);
     }
 
     public EngagementUser() {
@@ -251,6 +296,7 @@ public class EngagementUser implements Parcelable {
         this.companyKey = in.readString();
         this.email = in.readString();
         this.emailNotificationSubscription = in.readString();
+        this.pushNotificationBarHideTimeInMilliseconds = in.readString();
         this.country = in.readString();
         this.isActive = in.readByte() != 0;
         this.phoneNumber = in.readString();
@@ -260,10 +306,13 @@ public class EngagementUser implements Parcelable {
         this.pushNotificationHeaderImage = in.readString();
         this.imagesDirectoryName = in.readString();
         this.pushNotificationHeaderBackgroundColor = in.readString();
-        this.pushNotificationHeaderTextColor = in.readString();
+        this.pushNotificationHeaderTitleTextColor = in.readString();
+        this.pushNotificationHeaderTitleTextSize = in.readString();
+        this.pushNotificationHeaderBodyTextColor = in.readString();
+        this.pushNotificationHeaderBodyTextSize = in.readString();
     }
 
-    public static final Parcelable.Creator<EngagementUser> CREATOR = new Parcelable.Creator<EngagementUser>() {
+    public static final Creator<EngagementUser> CREATOR = new Creator<EngagementUser>() {
         @Override
         public EngagementUser createFromParcel(Parcel source) {
             return new EngagementUser(source);

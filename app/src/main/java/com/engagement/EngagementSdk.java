@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.engagement.controllers.CampaignController;
 import com.engagement.controllers.FireBaseTokenController;
 import com.engagement.controllers.RegisterUserController;
+import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
@@ -131,8 +132,8 @@ public class EngagementSdk {
         return context;
     }
 
-    public static void setEngagementSdkMsg(Context context, Map<String, String> data, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener) {
-        CampaignController.getSingletonInstance().setEngagementMessage(context, data, cls, notificationStatusBarIcon, messageActionsListener);
+    public static void setEngagementSdkMsg(Context context, Map<String, String> data, JSONObject notificationPayLoad, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
+        CampaignController.getSingletonInstance().setEngagementMessage(context, data,notificationPayLoad, cls, notificationStatusBarIcon, messageActionsListener,deepLinkActionsListener);
     }
 
     public void setUpdateUserLocation(String longitude, String latitude) {

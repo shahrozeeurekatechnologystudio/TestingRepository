@@ -2,9 +2,14 @@ package com.engagement.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+
+import com.engagement.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +31,14 @@ public class ConstantFunctions {
         }
         return date;
     }
-
+    public static void loadRGBImage(Context context, String path, ImageView imageView) {
+        if(path != null && !path.equalsIgnoreCase(""))
+            Picasso.with(context)
+                    .load(path)
+                    .error(R.mipmap.ic_tick_white)
+                    .config(Bitmap.Config.RGB_565)
+                    .into(imageView);
+    }
     public static int getHeightPixels(Activity activity) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

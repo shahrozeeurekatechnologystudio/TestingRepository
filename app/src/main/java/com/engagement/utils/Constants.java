@@ -34,10 +34,15 @@ public class Constants {
     public static final String LOGIN_USER_SESSION_TOKEN_KEY = "authToken";
     public static final int EXPIRE_TIME = 5;
     public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
-    public static final String PUSH_NOTIFICATION_DATA = "push_notification_data";
+    public static final String ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD = "engagement_push_notification_data_payload";
+    public static final String ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD = "engagement_notification_payload";
     public static final String SERVER_OK_REQUEST_CODE = "200";
     public static final String CAMPAIGN_RECEIVE_DATE = "campaign_receive_date";
     public static final String TRACK_KEY = "track_key";
+    public static final String ENGAGEMENT_PUSH_TITLE_KEY = "engagement_push_title";
+    public static final String ENGAGEMENT_PUSH_BODY_KEY = "engagement_push_body";
+    public static final String ENGAGEMENT_PUSH_ICON_KEY = "engagement_push_icon";
+    public static final String ENGAGEMENT_PUSH_LINK_KEY = "engagement_push_link";
 
 
 }

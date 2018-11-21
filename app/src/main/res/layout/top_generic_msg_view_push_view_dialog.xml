@@ -1,39 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rl_Notification_bar"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_Notification_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_blue"
+    android:clickable="true"
+    android:elevation="@dimen/d_3"
+    android:minHeight="@dimen/d_40">
+
+    <ImageView
+        android:id="@+id/iv_push"
+        android:layout_width="@dimen/d_60"
+        android:layout_height="@dimen/d_60"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/d_10"
+        android:layout_marginLeft="@dimen/d_10"
+        android:layout_marginStart="@dimen/d_10"
+        android:layout_marginEnd="@dimen/d_10"
+        android:layout_marginRight="@dimen/d_10"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_tick_white" />
+
+    <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_blue"
-        android:clickable="true"
-        android:elevation="@dimen/d_3"
-        android:minHeight="@dimen/d_40"
-      >
+        android:layout_toEndOf="@+id/iv_push"
+        android:layout_toRightOf="@+id/iv_push"
+        android:layout_toStartOf="@+id/iv_close"
+        android:layout_toLeftOf="@+id/iv_close"
+        android:layout_marginTop="@dimen/d_12"
+        android:layout_marginRight="@dimen/d_10"
+        android:layout_marginEnd="@dimen/d_10"
+        android:autoLink="all"
+        android:gravity="start|left"
+        android:lineSpacingExtra="@dimen/d_1_50"
+        android:scrollbars="horizontal"
+        android:textColor="@color/color_white"
+        android:textColorLink="@color/color_blue_dark"
+        android:textSize="@dimen/t_title_1"
+        android:typeface="sans" />
 
-        <ImageView
-            android:id="@+id/iv_push"
-            android:layout_width="@dimen/d_50"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:scaleType="center"
-            android:src="@mipmap/ic_tick_white" />
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_10"
+        android:layout_marginEnd="@dimen/d_10"
+        android:layout_marginBottom="@dimen/d_10"
+        android:layout_toStartOf="@+id/iv_close"
+        android:layout_toLeftOf="@+id/iv_close"
+        android:layout_toEndOf="@+id/iv_push"
+        android:layout_toRightOf="@+id/iv_push"
+        android:autoLink="all"
+        android:gravity="center_vertical|start|left"
+        android:lineSpacingExtra="@dimen/d_1_50"
+        android:maxHeight="@dimen/d_100"
+        android:scrollbars="vertical"
+        android:textColor="@color/color_white"
+        android:textColorLink="@color/color_blue_dark"
+        android:textSize="@dimen/t_title_2"
+        android:typeface="sans" />
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="@dimen/d_35"
+        android:layout_height="@dimen/d_35"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/d_3"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/popup_close" />
 
-        <TextView
-            android:id="@+id/tv_push"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toEndOf="@+id/iv_push"
-            android:layout_toRightOf="@+id/iv_push"
-            android:autoLink="all"
-            android:gravity="center_vertical|start|left"
-            android:lineSpacingExtra="@dimen/d_1_50"
-            android:paddingTop="@dimen/d_3"
-            android:paddingBottom="@dimen/d_3"
-            android:textColor="@color/color_white"
-            android:textColorLink="@color/color_blue_dark"
-            android:textSize="@dimen/t_title_2"
-            android:typeface="sans" />
-
-    </RelativeLayout>
+</RelativeLayout>

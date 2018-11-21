@@ -16,9 +16,11 @@ import com.engagement.R;
 import com.engagement.UIViews.PushNotificationDialog;
 import com.engagement.UIViews.DialogBannerTopBottom;
 import com.engagement.UIViews.DialogMessageMiddleFull;
+import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.utils.Constants;
 import com.engagement.utils.LoginUserInfo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,16 +45,16 @@ public class CampaignController {
         return instance;
     }
 
-    public void setEngagementMessage(Context context, Map<String, String> data, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener) {
+    public void setEngagementMessage(Context context, Map<String, String> data, JSONObject notificationPayLoad, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
         if (data != null) {
             try {
                 if (data.containsKey(Constants.PUSH_NOTIFICATION_ALERT)
                         && data.get(Constants.PUSH_NOTIFICATION_ALERT) != null) {
-                    handlePushReceivedData(context, data, data.get(Constants.PUSH_NOTIFICATION_ALERT), cls, notificationStatusBarIcon, messageActionsListener);
+                    handlePushReceivedData(context, data, notificationPayLoad, data.get(Constants.PUSH_NOTIFICATION_ALERT), cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
                 } else if (data.toString() != null && data.toString().split("=") != null && data.toString().split("=").length > 0 &&
                         data.toString().split("=")[1] != null) {
 
-                    handlePushReceivedData(context, data, data.toString().split("=")[1], cls, notificationStatusBarIcon, messageActionsListener);
+                    handlePushReceivedData(context, data, notificationPayLoad, data.toString().split("=")[1], cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
 
                 } else {
                 }
@@ -64,13 +66,28 @@ public class CampaignController {
         }
     }
 
-    private void handlePushReceivedData(Context context, Map<String, String> data, String messageBody, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener) {
+    private void handlePushReceivedData(Context context, Map<String, String> data, JSONObject notificationPayLoad, String messageBody, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
         try {
-            JSONObject notificationJson = new JSONObject(messageBody);
-            if (notificationJson != null && notificationJson.has(Constants.MESSAGE_KEY_TYPE_PLATFORM) && notificationJson.get(Constants.MESSAGE_KEY_TYPE_PLATFORM) != null && notificationJson.getBoolean(Constants.MESSAGE_KEY_TYPE_PLATFORM)) {
-                if (notificationJson != null && notificationJson.has(Constants.MESSAGE_KEY_TYPE_SILENT) && notificationJson.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && !notificationJson.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
-                    if (notificationJson != null && notificationJson.has(Constants.LOGIN_USER_ID_KEY) && notificationJson.get(Constants.LOGIN_USER_ID_KEY) != null && notificationJson.getString(Constants.LOGIN_USER_ID_KEY) != null) {
-                        if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context) != null && notificationJson.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context))) {
+            JSONObject dataNotificationPayLoad = new JSONObject(messageBody);
+           /* JSONObject pushNotificationPayLoadJson=null;
+            data.to
+            if (dataNotificationPayLoad.getString("campaign_type") != null && dataNotificationPayLoad.getString("campaign_type").equals("push")) {
+                if (data != null && data.get(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && data.get(Constants.ENGAGEMENT_PUSH_BODY_KEY) != null ) {
+                    pushNotificationPayLoadJson = new JSONObject();
+                    pushNotificationPayLoadJson.put("body",remoteMessage.getNotification().getBody());
+                    if (remoteMessage.getNotification().getTitle() != null)
+                        notificationJsonPart.put("title",remoteMessage.getNotification().getTitle());
+                    if (remoteMessage.getNotification().getIcon() != null)
+                        notificationJsonPart.put("icon",remoteMessage.getNotification().getIcon());
+                    if (remoteMessage.getNotification().getLink() != null)
+                        notificationJsonPart.put("link",remoteMessage.getNotification().getLink());
+
+                }
+            }*/
+            if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_PLATFORM) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_PLATFORM) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_PLATFORM)) {
+                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && !dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
+                    if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.LOGIN_USER_ID_KEY) && dataNotificationPayLoad.get(Constants.LOGIN_USER_ID_KEY) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY) != null) {
+                        if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context))) {
                             ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
                             List<ActivityManager.RunningTaskInfo> services = activityManager != null ? activityManager.getRunningTasks(Integer.MAX_VALUE) : null;
                             boolean isActivityFound = false;
@@ -80,14 +97,14 @@ public class CampaignController {
                             }
 
                             if (isActivityFound) {
-                                setEngagementMessageShowingInAppAndPush(messageBody);
+                                setEngagementMessageShowingInAppAndPush(messageBody, notificationPayLoad, deepLinkActionsListener);
                             } else {
-                                showNotification(context, messageBody, cls, notificationStatusBarIcon);
+                                showNotification(context, messageBody, cls, notificationStatusBarIcon, notificationPayLoad);
                             }
                             try {
-                                if (notificationJson != null && notificationJson.has("track_key") && notificationJson.get("track_key") != null && notificationJson.getString("track_key") != null
+                                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
                                         ) {
-                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, notificationJson.getString("track_key"));
+                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
                                 }
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                 LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
@@ -97,7 +114,7 @@ public class CampaignController {
                             }
                         }
                     }
-                } else if (notificationJson != null && notificationJson.has(Constants.MESSAGE_KEY_TYPE_SILENT) && notificationJson.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && notificationJson.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
+                } else if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
                     if (messageActionsListener != null)
                         messageActionsListener.onMessageSilent(data);
                 }
@@ -110,7 +127,7 @@ public class CampaignController {
         }
     }
 
-    private void showNotification(Context context, String messageBody, Class<?> cls, int notificationStatusBarIcon) {
+    private void showNotification(Context context, String messageBody, Class<?> cls, int notificationStatusBarIcon, JSONObject notificationPayLoad) {
         try {
             NotificationCompat.Builder mBuilder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -120,15 +137,14 @@ public class CampaignController {
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_SOUND)
                                     .setContentTitle(context.getResources().getString(R.string.app_name));
-                }catch (NoSuchMethodError e) {
+                } catch (NoSuchMethodError e) {
                     mBuilder =
                             new NotificationCompat.Builder(context)
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_SOUND)
                                     .setContentTitle(context.getResources().getString(R.string.app_name));
                 }
-            }
-            else {
+            } else {
                 mBuilder =
                         new NotificationCompat.Builder(context)
                                 .setAutoCancel(true)
@@ -157,8 +173,13 @@ public class CampaignController {
                 mBuilder.setSmallIcon(notificationStatusBarIcon);
             }
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.PUSH_NOTIFICATION_DATA,
+            bundle.putString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD,
                     messageBody);
+            if (notificationPayLoad != null) {
+                bundle.putString(
+                        Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD,
+                        notificationPayLoad.toString());
+            }
             Intent notificationIntent = new Intent(context, cls);
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             notificationIntent.putExtras(bundle);
@@ -182,42 +203,118 @@ public class CampaignController {
         }
     }
 
-    public void handlePushNotificationFlow(Intent intent) {
-        if (EngagementSdk.getSingletonInstance()!=null && EngagementSdk.getSingletonInstance().getContext()!=null && !EngagementSdk.getSingletonInstance().getActiveActivity().isFinishing()) {
+    public void handlePushNotificationFlow(Intent intent, DeepLinkActionsListener deepLinkActionsListener) {
+        if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null && !EngagementSdk.getSingletonInstance().getActiveActivity().isFinishing()) {
             Bundle activityBundle = intent.getExtras();
             if (activityBundle != null) {
-                if (activityBundle.containsKey(Constants.PUSH_NOTIFICATION_DATA)) {
+                if (activityBundle.containsKey(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD)) {
                     if (intent.getExtras()
-                            .getString(Constants.PUSH_NOTIFICATION_DATA) != null) {
+                            .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD) != null &&
+                            intent.getExtras()
+                                    .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD) != null) {
+                        JSONObject notificationPayLoad = null;
+                        try {
+                            notificationPayLoad = new JSONObject(intent.getExtras()
+                                    .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (notificationPayLoad != null) {
+                            setEngagementMessageShowingInAppAndPush(intent.getExtras()
+                                    .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD), notificationPayLoad, deepLinkActionsListener);
+                        }
+                    } else if (intent.getExtras()
+                            .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD) != null) {
                         setEngagementMessageShowingInAppAndPush(intent.getExtras()
-                                .getString(Constants.PUSH_NOTIFICATION_DATA));
+                                .getString(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD), null, deepLinkActionsListener);
+
                     }
-                    activityBundle.remove(Constants.PUSH_NOTIFICATION_DATA);
-                    intent.removeExtra(Constants.PUSH_NOTIFICATION_DATA);
+                    activityBundle.remove(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD);
+                    intent.removeExtra(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD);
+                    activityBundle.remove(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD);
+                    intent.removeExtra(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD);
 
                 }
             }
         }
     }
 
-    private void setEngagementMessageShowingInAppAndPush(String result) {
+    private void setEngagementMessageShowingInAppAndPush(String result, final JSONObject notificationPayLoad, final DeepLinkActionsListener deepLinkActionsListener) {
         try {
             final JSONObject notificationJson = new JSONObject(result);
+            final String icon;
+            final String deepLinkUri;
             if (notificationJson != null && notificationJson.has(Constants.LOGIN_USER_ID_KEY) && notificationJson.get(Constants.LOGIN_USER_ID_KEY) != null && notificationJson.getString(Constants.LOGIN_USER_ID_KEY) != null) {
                 if (EngagementSdk.getSingletonInstance() != null && !EngagementSdk.getSingletonInstance().getActiveActivity().isFinishing()
                         && notificationJson.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null))) {
                     if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE) != null) {
-                        if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_PUSH) && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA) != null) {
-                            EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
-                                public void run() {
-                                    try {
-                                        new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA)).showDialog();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                        if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_PUSH)) {
+                            if (notificationPayLoad != null) {
+                                if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_ICON_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_ICON_KEY) != null) {
+                                    icon = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_ICON_KEY);
 
                                 }
-                            });
+                                else{
+                                    icon="";
+                                }
+
+                                if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_LINK_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY) != null) {
+                                    deepLinkUri = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY);
+
+                                }
+                                else{
+                                    deepLinkUri="";
+                                }
+                                if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) != null) {
+                                    EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) , notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    });
+
+                                } else if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) == null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) != null) {
+                                    EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "",notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    });
+                                } else if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) &&notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) &&notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) == null) {
+                                    EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY),"", icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    });
+                                }
+
+                            } else {
+                                if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA) != null) {
+                                    EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            try {
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(),"", notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA), null, null, null).showDialog();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    });
+                                }
+                            }
                         } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG)
                                 && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
                             if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_TOP)) {
@@ -225,12 +322,12 @@ public class CampaignController {
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_BOTTOM)) {
                                 showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
-                                showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(),notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                             } else {
                                 showFullBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                             }
                         } else {
-                            if(notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null)
+                            if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null)
                                 showFullBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                         }
                     }
@@ -240,7 +337,6 @@ public class CampaignController {
             e.printStackTrace();
         }
     }
-
 
 
     private void showTopBanner(final Activity context, final String msg) {
