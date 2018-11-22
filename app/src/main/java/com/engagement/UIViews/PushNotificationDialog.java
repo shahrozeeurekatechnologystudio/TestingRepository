@@ -35,13 +35,15 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
     private String deepLinkUri;
     private DeepLinkActionsListener deepLinkActionsListener;
     private String icon;
+    private String backgroundColor;
     private String title;
     private String msg;
 
-    public PushNotificationDialog(Activity context, String title,String msg, String icon, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
+    public PushNotificationDialog(Activity context, String title, String msg, String icon, String backgroundColor, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
         super(context, R.style.engagement_translateDialogAnimation_slow);
         this.context = context;
         this.icon = icon;
+        this.backgroundColor = backgroundColor;
         this.deepLinkUri = deepLinkUri;
         this.deepLinkActionsListener = deepLinkActionsListener;
         this.title = title;
@@ -69,28 +71,36 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
         tvMsg.setOnClickListener(this);
         if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getEngagementUser() != null) {
             EngagementUser engagementUser = EngagementSdk.getSingletonInstance().getEngagementUser();
-            if (engagementUser.getPushNotificationHeaderBackgroundColor() != null
+
+            if (backgroundColor != null && !backgroundColor.equalsIgnoreCase("")) {
+                rl_Notification_bar.setBackgroundColor(Color.parseColor(backgroundColor));
+            } else if (engagementUser.getPushNotificationHeaderBackgroundColor() != null
                     && !engagementUser.getPushNotificationHeaderBackgroundColor().equalsIgnoreCase("")) {
                 rl_Notification_bar.setBackgroundColor(Color.parseColor(engagementUser.getPushNotificationHeaderBackgroundColor()));
             }
-            if (icon != null && !icon.equalsIgnoreCase("")) {
-                ConstantFunctions.loadRGBImage(context, icon, ivImagePush);
+            if (engagementUser.isPushBannerIconHidden()) {
+                ivImagePush.setVisibility(View.GONE);
             } else {
-                if (engagementUser.getPushNotificationHeaderImage() != null
-                        && !engagementUser.getPushNotificationHeaderImage().equalsIgnoreCase("")) {
-                    String imagesDirectoryName;
-                    if (engagementUser.getImagesDirectoryName() != null
-                            && !engagementUser.getImagesDirectoryName().equalsIgnoreCase("")) {
-                        imagesDirectoryName = engagementUser.getImagesDirectoryName();
-                    } else {
-                        imagesDirectoryName = Constants.DEFAULT_IMAGES_DIRECTORY_NAME;
+                ivImagePush.setVisibility(View.VISIBLE);
+                if (icon != null && !icon.equalsIgnoreCase("")) {
+                    ConstantFunctions.loadRGBImage(context, icon, ivImagePush);
+                } else {
+                    if (engagementUser.getPushNotificationHeaderImage() != null
+                            && !engagementUser.getPushNotificationHeaderImage().equalsIgnoreCase("")) {
+                        String imagesDirectoryName;
+                        if (engagementUser.getImagesDirectoryName() != null
+                                && !engagementUser.getImagesDirectoryName().equalsIgnoreCase("")) {
+                            imagesDirectoryName = engagementUser.getImagesDirectoryName();
+                        } else {
+                            imagesDirectoryName = Constants.DEFAULT_IMAGES_DIRECTORY_NAME;
+                        }
+                        Resources resources = context.getResources();
+                        int resourceId = resources.getIdentifier(engagementUser.getPushNotificationHeaderImage(), imagesDirectoryName,
+                                context.getPackageName());
+                        //Drawable drawable = resources.getDrawable(resourceId);
+                        // ivImagePush.setImageDrawable(drawable);
+                        ivImagePush.setImageResource(resourceId);
                     }
-                    Resources resources = context.getResources();
-                    int resourceId = resources.getIdentifier(engagementUser.getPushNotificationHeaderImage(), imagesDirectoryName,
-                            context.getPackageName());
-                    //Drawable drawable = resources.getDrawable(resourceId);
-                    // ivImagePush.setImageDrawable(drawable);
-                    ivImagePush.setImageResource(resourceId);
                 }
             }
             if (engagementUser.getPushNotificationHeaderTitleTextColor() != null

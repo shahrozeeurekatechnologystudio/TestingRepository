@@ -43,6 +43,7 @@ public class Constants {
     public static final String ENGAGEMENT_PUSH_BODY_KEY = "engagement_push_body";
     public static final String ENGAGEMENT_PUSH_ICON_KEY = "engagement_push_icon";
     public static final String ENGAGEMENT_PUSH_LINK_KEY = "engagement_push_link";
+    public static final String ENGAGEMENT_PUSH_BACKGROUND_COLOR = "engagement_push_background_color";
 
 
 }

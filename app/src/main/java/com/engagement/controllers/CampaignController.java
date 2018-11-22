@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+
 import com.engagement.EngagementSdk;
 import com.engagement.R;
 import com.engagement.UIViews.PushNotificationDialog;
@@ -69,21 +70,6 @@ public class CampaignController {
     private void handlePushReceivedData(Context context, Map<String, String> data, JSONObject notificationPayLoad, String messageBody, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
         try {
             JSONObject dataNotificationPayLoad = new JSONObject(messageBody);
-           /* JSONObject pushNotificationPayLoadJson=null;
-            data.to
-            if (dataNotificationPayLoad.getString("campaign_type") != null && dataNotificationPayLoad.getString("campaign_type").equals("push")) {
-                if (data != null && data.get(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && data.get(Constants.ENGAGEMENT_PUSH_BODY_KEY) != null ) {
-                    pushNotificationPayLoadJson = new JSONObject();
-                    pushNotificationPayLoadJson.put("body",remoteMessage.getNotification().getBody());
-                    if (remoteMessage.getNotification().getTitle() != null)
-                        notificationJsonPart.put("title",remoteMessage.getNotification().getTitle());
-                    if (remoteMessage.getNotification().getIcon() != null)
-                        notificationJsonPart.put("icon",remoteMessage.getNotification().getIcon());
-                    if (remoteMessage.getNotification().getLink() != null)
-                        notificationJsonPart.put("link",remoteMessage.getNotification().getLink());
-
-                }
-            }*/
             if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_PLATFORM) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_PLATFORM) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_PLATFORM)) {
                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && !dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
                     if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.LOGIN_USER_ID_KEY) && dataNotificationPayLoad.get(Constants.LOGIN_USER_ID_KEY) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY) != null) {
@@ -244,6 +230,7 @@ public class CampaignController {
             final JSONObject notificationJson = new JSONObject(result);
             final String icon;
             final String deepLinkUri;
+            final String backgroundColor;
             if (notificationJson != null && notificationJson.has(Constants.LOGIN_USER_ID_KEY) && notificationJson.get(Constants.LOGIN_USER_ID_KEY) != null && notificationJson.getString(Constants.LOGIN_USER_ID_KEY) != null) {
                 if (EngagementSdk.getSingletonInstance() != null && !EngagementSdk.getSingletonInstance().getActiveActivity().isFinishing()
                         && notificationJson.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null))) {
@@ -253,23 +240,26 @@ public class CampaignController {
                                 if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_ICON_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_ICON_KEY) != null) {
                                     icon = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_ICON_KEY);
 
+                                } else {
+                                    icon = "";
                                 }
-                                else{
-                                    icon="";
-                                }
+                                if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BACKGROUND_COLOR) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BACKGROUND_COLOR) != null) {
+                                    backgroundColor = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BACKGROUND_COLOR);
 
+                                } else {
+                                    backgroundColor = "";
+                                }
                                 if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_LINK_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY) != null) {
                                     deepLinkUri = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY);
 
-                                }
-                                else{
-                                    deepLinkUri="";
+                                } else {
+                                    deepLinkUri = "";
                                 }
                                 if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) != null) {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) , notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -281,18 +271,18 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "",notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
 
                                         }
                                     });
-                                } else if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) &&notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) &&notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) == null) {
+                                } else if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_TITLE_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY) != null && notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_BODY_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY) == null) {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY),"", icon, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), "", icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -306,7 +296,7 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(),"", notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA), null, null, null).showDialog();
+                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA), null, null, null, null).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

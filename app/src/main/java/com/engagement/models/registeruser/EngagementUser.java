@@ -16,6 +16,7 @@ public class EngagementUser implements Parcelable {
     private String companyKey;
     private String email;
     private String emailNotificationSubscription;
+    private boolean isPushBannerIconHidden=true;
     private String pushNotificationBarHideTimeInMilliseconds;
     private String country;
     private boolean isActive;
@@ -95,6 +96,14 @@ public class EngagementUser implements Parcelable {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public boolean isPushBannerIconHidden() {
+        return isPushBannerIconHidden;
+    }
+
+    public void setPushBannerIconHidden(boolean pushBannerIconHidden) {
+        isPushBannerIconHidden = pushBannerIconHidden;
     }
 
     public void setCountry(String country) {
@@ -235,6 +244,7 @@ public class EngagementUser implements Parcelable {
                 ", companyKey='" + companyKey + '\'' +
                 ", email='" + email + '\'' +
                 ", emailNotificationSubscription='" + emailNotificationSubscription + '\'' +
+                ", isPushBannerIconHidden=" + isPushBannerIconHidden +
                 ", pushNotificationBarHideTimeInMilliseconds='" + pushNotificationBarHideTimeInMilliseconds + '\'' +
                 ", country='" + country + '\'' +
                 ", isActive=" + isActive +
@@ -268,6 +278,7 @@ public class EngagementUser implements Parcelable {
         dest.writeString(this.companyKey);
         dest.writeString(this.email);
         dest.writeString(this.emailNotificationSubscription);
+        dest.writeByte(this.isPushBannerIconHidden ? (byte) 1 : (byte) 0);
         dest.writeString(this.pushNotificationBarHideTimeInMilliseconds);
         dest.writeString(this.country);
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
@@ -296,6 +307,7 @@ public class EngagementUser implements Parcelable {
         this.companyKey = in.readString();
         this.email = in.readString();
         this.emailNotificationSubscription = in.readString();
+        this.isPushBannerIconHidden = in.readByte() != 0;
         this.pushNotificationBarHideTimeInMilliseconds = in.readString();
         this.country = in.readString();
         this.isActive = in.readByte() != 0;
@@ -312,7 +324,7 @@ public class EngagementUser implements Parcelable {
         this.pushNotificationHeaderBodyTextSize = in.readString();
     }
 
-    public static final Creator<EngagementUser> CREATOR = new Creator<EngagementUser>() {
+    public static final Parcelable.Creator<EngagementUser> CREATOR = new Parcelable.Creator<EngagementUser>() {
         @Override
         public EngagementUser createFromParcel(Parcel source) {
             return new EngagementUser(source);
