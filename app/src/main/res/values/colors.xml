@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00000000</color>
+    <color name="color_white_grash">#fff</color>
     <color name="color_white">#ffffff</color>
     <color name="color_blue_dark">#ff006eae</color>
+    <color name="color_transparent">#00000000</color>
+    <color name="dim_foreground_dark">#bebebe</color>
     <color name="color_blue">#0093d5</color>
     <color name="color_primary"></color>
 </resources>

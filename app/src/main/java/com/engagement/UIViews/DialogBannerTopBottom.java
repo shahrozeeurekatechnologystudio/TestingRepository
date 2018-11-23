@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -36,11 +37,11 @@ public class DialogBannerTopBottom extends Dialog {
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         if (position.equals("top")) {
             setContentView(R.layout.layout_banner_top);
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_top_view);
+            CardView relativeLayout = (CardView) findViewById(R.id.rl_top_view);
             relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         } else {
             setContentView(R.layout.layout_banner_bottom);
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_bottom_view);
+            CardView relativeLayout = (CardView) findViewById(R.id.rl_bottom_view);
             relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         }
         this.context = context;

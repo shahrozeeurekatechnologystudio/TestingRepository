@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
 import android.webkit.SslErrorHandler;
@@ -43,7 +44,7 @@ public class DialogMessageMiddleFull extends Dialog {
         } else {
             setContentView(R.layout.layout_message_center);
             getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rl_container);
+            CardView relativeLayout = (CardView) findViewById(R.id.rl_container);
             relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         }
         this.context = context;

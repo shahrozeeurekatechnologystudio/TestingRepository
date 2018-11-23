@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -60,7 +61,7 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
     }
 
     private void setScreenViews() {
-        RelativeLayout rl_Notification_bar = (RelativeLayout) findViewById(R.id.rl_Notification_bar);
+        CardView rl_Notification_bar = (CardView) findViewById(R.id.rl_Notification_bar);
         ImageView ivImagePush = (ImageView) findViewById(R.id.iv_push);
         ivClose = (ImageView) findViewById(R.id.iv_close);
         ivClose.setOnClickListener(this);
@@ -73,10 +74,10 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
             EngagementUser engagementUser = EngagementSdk.getSingletonInstance().getEngagementUser();
 
             if (backgroundColor != null && !backgroundColor.equalsIgnoreCase("")) {
-                rl_Notification_bar.setBackgroundColor(Color.parseColor(backgroundColor));
+                rl_Notification_bar.setCardBackgroundColor(Color.parseColor(backgroundColor));
             } else if (engagementUser.getPushNotificationHeaderBackgroundColor() != null
                     && !engagementUser.getPushNotificationHeaderBackgroundColor().equalsIgnoreCase("")) {
-                rl_Notification_bar.setBackgroundColor(Color.parseColor(engagementUser.getPushNotificationHeaderBackgroundColor()));
+                rl_Notification_bar.setCardBackgroundColor(Color.parseColor(engagementUser.getPushNotificationHeaderBackgroundColor()));
             }
             if (engagementUser.isPushBannerIconHidden()) {
                 ivImagePush.setVisibility(View.GONE);

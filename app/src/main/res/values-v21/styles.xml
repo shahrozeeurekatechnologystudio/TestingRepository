@@ -4,8 +4,10 @@
     <style name="engagement_translateDialogAnimation_slow">
         <item name="android:windowEnterAnimation">@anim/anim_translate_in_slow</item>
         <item name="android:windowExitAnimation">@anim/anim_translate_out_slow</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
     <style name="engagement_translateDialogAnimation_slow_bottom">
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowEnterAnimation">@anim/anim_translate_in_slow_bottom</item>
         <item name="android:windowExitAnimation">@anim/anim_translate_out_slow_bottom</item>
     </style>
@@ -16,7 +18,7 @@
         <item name="android:textAppearance">@style/CustomTextAppearance</item>
     </style>
     <style name="engagement_dialog_style_animation_top_bottom" parent="Base.Theme.AppCompat.Dialog">
-
+        <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
 
@@ -27,7 +29,7 @@
         <item name="android:editTextStyle">@style/EditTextAppearance</item>
         <item name="android:textAppearance">@style/CustomTextAppearance</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimAmount">0.70</item>
+        <item name="android:backgroundDimAmount">0.60</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
