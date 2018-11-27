@@ -18,31 +18,30 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.engagement.R;
 import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 
-public class DialogBannerTopBottom extends Dialog {
+public class EngagementDialogBannerTopBottom extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
 
-    public DialogBannerTopBottom(Activity context, String msg, String position) {
+    public EngagementDialogBannerTopBottom(Activity context, String msg, String position) {
         super(context, R.style.engagement_dialog_style_animation_top_bottom);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         if (position.equals("top")) {
-            setContentView(R.layout.layout_banner_top);
-            CardView relativeLayout = (CardView) findViewById(R.id.rl_top_view);
-            relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
+            setContentView(R.layout.engagement_layout_banner_top);
+            CardView cardView = (CardView) findViewById(R.id.card_view_top_view);
+            cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         } else {
-            setContentView(R.layout.layout_banner_bottom);
-            CardView relativeLayout = (CardView) findViewById(R.id.rl_bottom_view);
-            relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
+            setContentView(R.layout.engagement_layout_banner_bottom);
+            CardView cardView = (CardView) findViewById(R.id.card_view_bottom_view);
+            cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         }
         this.context = context;
         setThemeStyle(position);
@@ -93,7 +92,7 @@ public class DialogBannerTopBottom extends Dialog {
 
             @Override
             public void onClick(View v) {
-                DialogBannerTopBottom.this.dismiss();
+                EngagementDialogBannerTopBottom.this.dismiss();
             }
         });
     }
@@ -115,7 +114,7 @@ public class DialogBannerTopBottom extends Dialog {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(Constants.CLOSE_DIALOG)) {
-                    DialogBannerTopBottom.this.dismiss();
+                    EngagementDialogBannerTopBottom.this.dismiss();
                 } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);

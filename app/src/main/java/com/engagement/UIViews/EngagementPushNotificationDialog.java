@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.engagement.EngagementSdk;
@@ -27,7 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class PushNotificationDialog extends Dialog implements View.OnClickListener {
+public class EngagementPushNotificationDialog extends Dialog implements View.OnClickListener {
 
     private Activity context;
     private ImageView ivClose;
@@ -40,7 +39,7 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
     private String title;
     private String msg;
 
-    public PushNotificationDialog(Activity context, String title, String msg, String icon, String backgroundColor, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
+    public EngagementPushNotificationDialog(Activity context, String title, String msg, String icon, String backgroundColor, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
         super(context, R.style.engagement_translateDialogAnimation_slow);
         this.context = context;
         this.icon = icon;
@@ -49,7 +48,7 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
         this.deepLinkActionsListener = deepLinkActionsListener;
         this.title = title;
         this.msg = msg;
-        setContentView(R.layout.top_generic_msg_view_push_view_dialog);
+        setContentView(R.layout.engagement_top_generic_msg_view_push_view_dialog);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.TOP);
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow);
@@ -61,7 +60,7 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
     }
 
     private void setScreenViews() {
-        CardView rl_Notification_bar = (CardView) findViewById(R.id.rl_Notification_bar);
+        CardView cardView = (CardView) findViewById(R.id.card_view_Notification_bar);
         ImageView ivImagePush = (ImageView) findViewById(R.id.iv_push);
         ivClose = (ImageView) findViewById(R.id.iv_close);
         ivClose.setOnClickListener(this);
@@ -74,10 +73,10 @@ public class PushNotificationDialog extends Dialog implements View.OnClickListen
             EngagementUser engagementUser = EngagementSdk.getSingletonInstance().getEngagementUser();
 
             if (backgroundColor != null && !backgroundColor.equalsIgnoreCase("")) {
-                rl_Notification_bar.setCardBackgroundColor(Color.parseColor(backgroundColor));
+                cardView.setCardBackgroundColor(Color.parseColor(backgroundColor));
             } else if (engagementUser.getPushNotificationHeaderBackgroundColor() != null
                     && !engagementUser.getPushNotificationHeaderBackgroundColor().equalsIgnoreCase("")) {
-                rl_Notification_bar.setCardBackgroundColor(Color.parseColor(engagementUser.getPushNotificationHeaderBackgroundColor()));
+                cardView.setCardBackgroundColor(Color.parseColor(engagementUser.getPushNotificationHeaderBackgroundColor()));
             }
             if (engagementUser.isPushBannerIconHidden()) {
                 ivImagePush.setVisibility(View.GONE);

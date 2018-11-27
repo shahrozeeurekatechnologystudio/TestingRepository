@@ -29,8 +29,8 @@ public class RegisterUserController {
     public void registerUser(EngagementUser engagementUser,JSONObject extraParams, UserActionsListener userActionsListener) {
         registerUserRestCalls(engagementUser,extraParams, userActionsListener);
     }
-    public void updateInfo(String userId,JSONObject extraParams, UserActionsListener userActionsListener) {
-        updateInfoRestCalls(userId,extraParams, userActionsListener);
+    public void updateInfo(JSONObject extraParams, UserActionsListener userActionsListener) {
+        updateInfoRestCalls(extraParams, userActionsListener);
     }
     private void registerUserRestCalls(EngagementUser engagementUser,JSONObject extraParams,UserActionsListener userActionsListener) {
         try {
@@ -78,11 +78,15 @@ public class RegisterUserController {
             }
         }
     }
-    private void updateInfoRestCalls(String userId,JSONObject extraParams,UserActionsListener userActionsListener) {
+    private void updateInfoRestCalls(JSONObject extraParams,UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
-            params.put("user_id", userId);
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
+                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
+                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+            }
             if(extraParams!=null)
                 params.put("extra_params", extraParams);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getRegisterUserUrl(),

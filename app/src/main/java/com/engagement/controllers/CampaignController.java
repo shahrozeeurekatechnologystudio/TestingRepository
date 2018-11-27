@@ -14,9 +14,9 @@ import android.support.v4.app.NotificationCompat;
 
 import com.engagement.EngagementSdk;
 import com.engagement.R;
-import com.engagement.UIViews.PushNotificationDialog;
-import com.engagement.UIViews.DialogBannerTopBottom;
-import com.engagement.UIViews.DialogMessageMiddleFull;
+import com.engagement.UIViews.EngagementPushNotificationDialog;
+import com.engagement.UIViews.EngagementDialogBannerTopBottom;
+import com.engagement.UIViews.EngagementDialogMessageMiddleFull;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.utils.Constants;
@@ -259,7 +259,7 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new EngagementPushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -271,7 +271,7 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new EngagementPushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_BODY_KEY), icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -282,7 +282,7 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), "", icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
+                                                new EngagementPushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_TITLE_KEY), "", icon, backgroundColor, deepLinkUri, deepLinkActionsListener).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -296,7 +296,7 @@ public class CampaignController {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {
                                         public void run() {
                                             try {
-                                                new PushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA), null, null, null, null).showDialog();
+                                                new EngagementPushNotificationDialog(EngagementSdk.getSingletonInstance().getActiveActivity(), "", notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA), null, null, null, null).showDialog();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -332,7 +332,7 @@ public class CampaignController {
     private void showTopBanner(final Activity context, final String msg) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new DialogBannerTopBottom(context, msg, Constants.POSITION_TOP);
+                new EngagementDialogBannerTopBottom(context, msg, Constants.POSITION_TOP);
             }
         });
 
@@ -341,7 +341,7 @@ public class CampaignController {
     private void showBottomBanner(final Activity context, final String msg) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new DialogBannerTopBottom(context, msg, Constants.POSITION_BOTTOM);
+                new EngagementDialogBannerTopBottom(context, msg, Constants.POSITION_BOTTOM);
             }
         });
 
@@ -350,7 +350,7 @@ public class CampaignController {
     private void showMiddleBanner(final Activity context, final String msg) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new DialogMessageMiddleFull(context, msg, Constants.POSITION_MIDDLE);
+                new EngagementDialogMessageMiddleFull(context, msg, Constants.POSITION_MIDDLE);
             }
         });
     }
@@ -358,7 +358,7 @@ public class CampaignController {
     private void showFullBanner(final Activity context, final String msg) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new DialogMessageMiddleFull(context, msg, Constants.POSITION_FULL);
+                new EngagementDialogMessageMiddleFull(context, msg, Constants.POSITION_FULL);
             }
         });
 

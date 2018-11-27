@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/d_20"
     android:orientation="vertical"
-    android:id="@+id/rl_top_view"
-    android:gravity="top"
-    android:layout_gravity="top"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:id="@+id/card_view_middle_container"
     android:clickable="true"
     android:elevation="@dimen/d_7"
     android:background="@android:color/transparent"
@@ -19,17 +20,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="top"
-    android:layout_gravity="top"
+    android:gravity="center"
+    android:layout_gravity="center"
    >
 
     <WebView
-        android:id="@+id/webView_banner_top"
+        android:id="@+id/webView_msg_center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarSize="@dimen/d_4"
         android:scrollbarThumbHorizontal="@drawable/scrollbar"
-        android:layout_gravity="top"
+        android:layout_gravity="center"
         />
 
     <ImageView

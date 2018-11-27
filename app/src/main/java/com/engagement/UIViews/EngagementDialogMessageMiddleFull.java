@@ -7,31 +7,26 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.engagement.R;
 import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 
 
-public class DialogMessageMiddleFull extends Dialog {
+public class EngagementDialogMessageMiddleFull extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
 
-    public DialogMessageMiddleFull(Activity context, String msg, String displyType) {
+    public EngagementDialogMessageMiddleFull(Activity context, String msg, String displyType) {
         super(context, R.style.engagement_dialog_style_animation);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow);
@@ -39,13 +34,13 @@ public class DialogMessageMiddleFull extends Dialog {
         this.setCanceledOnTouchOutside(false);
 
         if (displyType.equals("full")) {
-            setContentView(R.layout.layout_message_full_screen);
+            setContentView(R.layout.engagement_layout_message_full_screen);
             getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         } else {
-            setContentView(R.layout.layout_message_center);
+            setContentView(R.layout.engagement_layout_message_center);
             getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            CardView relativeLayout = (CardView) findViewById(R.id.rl_container);
-            relativeLayout.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
+            CardView cardView = (CardView) findViewById(R.id.card_view_middle_container);
+            cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         }
         this.context = context;
         setScreenViews();
@@ -65,7 +60,7 @@ public class DialogMessageMiddleFull extends Dialog {
 
             @Override
             public void onClick(View v) {
-                DialogMessageMiddleFull.this.dismiss();
+                EngagementDialogMessageMiddleFull.this.dismiss();
 
             }
         });
@@ -88,7 +83,7 @@ public class DialogMessageMiddleFull extends Dialog {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(Constants.CLOSE_DIALOG)) {
-                    DialogMessageMiddleFull.this.dismiss();
+                    EngagementDialogMessageMiddleFull.this.dismiss();
                 } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);

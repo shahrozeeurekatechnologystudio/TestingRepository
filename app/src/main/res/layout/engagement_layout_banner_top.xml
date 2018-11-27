@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/rl_bottom_view"
-    android:gravity="bottom"
-    android:layout_gravity="bottom"
+    android:id="@+id/card_view_top_view"
+    android:gravity="top"
+    android:layout_gravity="top"
     android:clickable="true"
     android:elevation="@dimen/d_7"
     android:background="@android:color/transparent"
@@ -19,8 +19,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="bottom"
-    android:layout_gravity="bottom"
+    android:gravity="top"
+    android:layout_gravity="top"
    >
 
     <WebView
