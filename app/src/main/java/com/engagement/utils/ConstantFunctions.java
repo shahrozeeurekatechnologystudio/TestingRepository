@@ -46,7 +46,14 @@ public class ConstantFunctions {
         int width = displayMetrics.widthPixels;
         return height;
     }
+    public static void setUserDefaultNull() {
+        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, null);
+        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null);
+        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_EMAIL_KEY, null);
+        LoginUserInfo.setValueForKey(Constants.COMPANY_KEY, null);
+        LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, null);
 
+    }
     public static void hideKeyboard(Activity activity) {
         try {
             View view = activity.getCurrentFocus();

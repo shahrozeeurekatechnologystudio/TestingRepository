@@ -18,6 +18,7 @@ import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.restkit.ApiUrl;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.LoginUserInfo;
 
@@ -109,16 +110,14 @@ public class EngagementSdk {
 
     }
 
-    public EngagementUser getEngagementUser() {
+   public EngagementUser getEngagementUser() {
         return engagementUser;
     }
 
     public void sdkLogOut(String fcmToken) {
         FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken);
         setEngagementUser(null);
-        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, null);
-        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null);
-        LoginUserInfo.setValueForKey(Constants.LOGIN_USER_EMAIL_KEY, null);
+        ConstantFunctions.setUserDefaultNull();
         //sInstance = null;
         //context = null;
 

@@ -81,17 +81,20 @@ public class RestCalls extends JsonObjectRequest {
         calendar.setTimeZone(TimeZone.getDefault());
         calendar.add(Calendar.MINUTE, Constants.EXPIRE_TIME);
         JwtBuilder builder = null;
-        if (!LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, "").equalsIgnoreCase("")) {
+        if (EngagementSdk.getSingletonInstance() != null &&
+                EngagementSdk.getSingletonInstance().getContext() != null && !LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, "").equalsIgnoreCase("") &&
+        !LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, "").equalsIgnoreCase("")) {
             builder = Jwts.builder()
                     .setExpiration(calendar.getTime())
-                    .claim("company_key", EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey())
+                    .claim("company_key", LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""))
                     .claim("user_token", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, ""))
-                    .signWith(SignatureAlgorithm.HS256, EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey());
-        } else {
+                    .signWith(SignatureAlgorithm.HS256, LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""));
+        } else if (EngagementSdk.getSingletonInstance() != null &&
+                EngagementSdk.getSingletonInstance().getContext() != null && !LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, "").equalsIgnoreCase("")) {
             builder = Jwts.builder()
                     .setExpiration(calendar.getTime())
-                    .claim("company_key", EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey())
-                    .signWith(SignatureAlgorithm.HS256, EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey());
+                    .claim("company_key", LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""))
+                    .signWith(SignatureAlgorithm.HS256, LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""));
         }
         return builder.compact();
     }
@@ -120,9 +123,9 @@ public class RestCalls extends JsonObjectRequest {
             headers.put("timezone", TimeZone.getDefault().getID());
             headers.put("app-id", pInfo.packageName);
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage().equalsIgnoreCase("")) {
-                headers.put("lang", EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage());
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
+            !LoginUserInfo.getValueForKey(Constants.LANGUAGE_KEY, "").equalsIgnoreCase(""))  {
+                headers.put("lang", LoginUserInfo.getValueForKey(Constants.LANGUAGE_KEY, ""));
             } else {
                 headers.put("lang", Locale.getDefault().getLanguage());
             }

@@ -9,6 +9,7 @@ import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
+import com.engagement.utils.LoginUserInfo;
 
 import org.json.JSONObject;
 
@@ -36,9 +37,9 @@ public class NewsFeedController {
                 params.put("template", template);
             }
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
-                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
             if (latitude != null && !latitude.equalsIgnoreCase("")) {
                 params.put("latitude", latitude);

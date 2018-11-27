@@ -83,9 +83,9 @@ public class RegisterUserController {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
-                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
             if(extraParams!=null)
                 params.put("extra_params", extraParams);
@@ -123,9 +123,19 @@ public class RegisterUserController {
                                 && response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY).get(Constants.API_RESPONSE_USER_TOKEN_KEY).toString() != null) {
                             LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).getJSONObject(Constants.API_RESPONSE_USER_DATA_KEY).get(Constants.API_RESPONSE_USER_TOKEN_KEY).toString());
                         }
-                        if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getEngagementUser() != null
-                                && EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null) {
-                            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                        if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext()!=null
+                                && EngagementSdk.getSingletonInstance().getEngagementUser() != null) {
+                            if (EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null
+                                    && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")
+                                    && EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey() != null
+                                    && !EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey().equalsIgnoreCase("")) {
+                                LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                                LoginUserInfo.setValueForKey(Constants.COMPANY_KEY, EngagementSdk.getSingletonInstance().getEngagementUser().getCompanyKey());
+                                if (EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage() != null
+                                        && !EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage().equalsIgnoreCase("")) {
+                                    LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, EngagementSdk.getSingletonInstance().getEngagementUser().getLanguage());
+                                }
+                            }
                         }
                         if (userActionsListener != null) {
                             userActionsListener.onCompleted(response);

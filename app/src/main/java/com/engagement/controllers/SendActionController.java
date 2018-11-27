@@ -32,16 +32,16 @@ public class SendActionController {
     }
 
     private void registerSendEventsRestCalls(ActionsEnums actionsEnum, JSONObject params, UserActionsListener userActionsListener) {
-        if (params != null && EngagementSdk.getSingletonInstance() != null &&
-                EngagementSdk.getSingletonInstance().getEngagementUser() != null &&
-                EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null && !EngagementSdk.getSingletonInstance().getEngagementUser().getUserID().equalsIgnoreCase("")) {
+        if (params != null && (EngagementSdk.getSingletonInstance() != null &&
+                EngagementSdk.getSingletonInstance().getContext()!= null &&
+                LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null)) {
 
             try {
                 this.userActionsListener = userActionsListener;
                 if (userActionsListener != null) {
                     userActionsListener.onStart();
                 }
-                params.put("user_id", EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 if (actionsEnum == ActionsEnums.ACTION) {
                     RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST,  ApiUrl.getCampaignTriggerEventUrl(),
                             params, responseListener(),

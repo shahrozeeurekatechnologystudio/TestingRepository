@@ -18,12 +18,12 @@ public class FireBaseTokenController {
 
     public static void sendRegistrationToServer(String token) {
         try {
-            if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser() != null && EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null
-                    && LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                 JSONObject params = new JSONObject();
                 params.put("user_id",
-                        EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                        LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 params.put("fire_base_key", token);
                 params.put("device_token", token);
                 params.put("is_login",
@@ -43,12 +43,12 @@ public class FireBaseTokenController {
 
     public static void sendRegistrationToServerExpireOnLogOut(String token) {
         try {
-            if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null &&
-                    EngagementSdk.getSingletonInstance().getEngagementUser() != null && EngagementSdk.getSingletonInstance().getEngagementUser().getUserID() != null
-                    && LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                 JSONObject params = new JSONObject();
                 params.put("user_id",
-                        EngagementSdk.getSingletonInstance().getEngagementUser().getUserID());
+                        LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 params.put("fire_base_key", token);
                 params.put("device_token", token);
                 params.put("is_login",
