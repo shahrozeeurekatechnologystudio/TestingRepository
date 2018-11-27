@@ -34,6 +34,17 @@ public class RegisterUserController {
     }
     private void registerUserRestCalls(EngagementUser engagementUser,JSONObject extraParams,UserActionsListener userActionsListener) {
         try {
+            if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext()!=null
+                    && engagementUser != null) {
+                if (engagementUser.getCompanyKey() != null
+                        && !engagementUser.getCompanyKey().equalsIgnoreCase("")) {
+                    LoginUserInfo.setValueForKey(Constants.COMPANY_KEY, engagementUser.getCompanyKey());
+                    if (engagementUser.getLanguage() != null
+                            && !engagementUser.getLanguage().equalsIgnoreCase("")) {
+                        LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, engagementUser.getLanguage());
+                    }
+                }
+            }
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
             if(engagementUser!=null) {
