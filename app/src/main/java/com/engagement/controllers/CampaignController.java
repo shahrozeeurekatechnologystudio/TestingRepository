@@ -19,6 +19,7 @@ import com.engagement.UIViews.EngagementDialogBannerTopBottom;
 import com.engagement.UIViews.EngagementDialogMessageMiddleFull;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
+import com.engagement.interfaces.UserActionsListener;
 import com.engagement.utils.Constants;
 import com.engagement.utils.LoginUserInfo;
 
@@ -290,7 +291,22 @@ public class CampaignController {
                                         }
                                     });
                                 }
+                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(new UserActionsListener() {
+                                    @Override
+                                    public void onStart() {
 
+                                    }
+
+                                    @Override
+                                    public void onCompleted(JSONObject object) {
+
+                                    }
+
+                                    @Override
+                                    public void onError(String exception) {
+
+                                    }
+                                });
                             } else {
                                 if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_DATA) != null) {
                                     EngagementSdk.getSingletonInstance().getActiveActivity().runOnUiThread(new Runnable() {

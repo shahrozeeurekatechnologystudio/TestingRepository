@@ -6,6 +6,7 @@ public class ApiUrl {
     private static final String REGISTER_USER_URL = "/initialize/platform";
     private static final String NEWS_FEED_URL = "/newsfeed/get_news";
     private static final String CAMPAIGN_TRIGGER_EVENT_URL = "/create/campaign/action/trigger";
+    private static final String PUSH_TRACK_VIEW_URL = "/push/tracking/service";
     private static final String LIST_TRIGGER_EVENT_URL = "/get/action/list";
     private static final String LIST_USER_ACTIONS_CONVERSIONS_RECORDED = "/get/user/actions";
     private static final String CONVERSION_TRIGGER_EVENT_URL = "/create/campaign/conversion";
@@ -38,6 +39,10 @@ public class ApiUrl {
 
     public static String getApiTriggerLink() {
         return getSitePrefix() + API_TRIGGER_LINK;
+    }
+
+    public static String getPushTrackViewUrl() {
+        return getSitePrefix() + PUSH_TRACK_VIEW_URL;
     }
 
     public static String getListTriggerEventUrl() {
