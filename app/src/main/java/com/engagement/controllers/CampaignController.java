@@ -75,6 +75,17 @@ public class CampaignController {
                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && !dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
                     if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.LOGIN_USER_ID_KEY) && dataNotificationPayLoad.get(Constants.LOGIN_USER_ID_KEY) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY) != null) {
                         if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context))) {
+                            try {
+                                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
+                                        ) {
+                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
+                                }
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
                             List<ActivityManager.RunningTaskInfo> services = activityManager != null ? activityManager.getRunningTasks(Integer.MAX_VALUE) : null;
                             boolean isActivityFound = false;
@@ -88,17 +99,7 @@ public class CampaignController {
                             } else {
                                 showNotification(context, messageBody, cls, notificationStatusBarIcon, notificationPayLoad);
                             }
-                            try {
-                                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
-                                        ) {
-                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
-                                }
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                                LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
                         }
                     }
                 } else if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
