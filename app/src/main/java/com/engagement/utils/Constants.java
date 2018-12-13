@@ -37,6 +37,7 @@ public class Constants {
     public static final String COMPANY_KEY = "company_key";
     public static final String LANGUAGE_KEY = "language_key";
     public static final String ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD = "engagement_push_notification_data_payload";
+    public static final String ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD_IN_KILL_STATE = "engagement_push_notification_data_payload_in_kill_state";
     public static final String ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD = "engagement_notification_payload";
     public static final String SERVER_OK_REQUEST_CODE = "200";
     public static final String CAMPAIGN_RECEIVE_DATE = "campaign_receive_date";

@@ -2,6 +2,8 @@ package com.engagement.interfaces;
 
 
 
+import android.os.Bundle;
+
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -11,7 +13,9 @@ import java.util.Map;
  */
 public abstract class MessageActionsListener {
 
-    public abstract void  onMessageSilent(Map<String, String> data);
-    public abstract void  onMessageNotPlatformEngagement(Map<String, String> data);
+    public abstract void  onMessageSilent(Map<String, String> map);
+    public abstract void  onMessageSilent(Bundle bundle);
+    public abstract void  onMessageNotPlatformEngagement(Map<String, String> map);
+    public abstract void  onMessageNotPlatformEngagement(Bundle bundle);
 
 }

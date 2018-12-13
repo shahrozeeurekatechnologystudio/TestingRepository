@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.engagement.EngagementSdk;
 import com.engagement.R;
@@ -22,16 +23,20 @@ import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.utils.Constants;
 import com.engagement.utils.LoginUserInfo;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 
 public class CampaignController {
@@ -191,7 +196,7 @@ public class CampaignController {
         }
     }
 
-    public void handlePushNotificationFlow(Intent intent, DeepLinkActionsListener deepLinkActionsListener) {
+    public void handlePushNotificationFlow(Intent intent, DeepLinkActionsListener deepLinkActionsListener, MessageActionsListener messageActionsListener) {
         if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null && !EngagementSdk.getSingletonInstance().getActiveActivity().isFinishing()) {
             Bundle activityBundle = intent.getExtras();
             if (activityBundle != null) {
@@ -222,6 +227,61 @@ public class CampaignController {
                     activityBundle.remove(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD);
                     intent.removeExtra(Constants.ENGAGEMENT_PUSH_NOTIFICATION_PAYLOAD);
 
+                } else if (activityBundle.containsKey(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD_IN_KILL_STATE) &&
+                        activityBundle.getBundle(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD_IN_KILL_STATE) != null) {
+                    try {
+                        Bundle bundle = activityBundle.getBundle(Constants.ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD_IN_KILL_STATE);
+                        if (bundle.containsKey(Constants.PUSH_NOTIFICATION_ALERT)
+                                && bundle.get(Constants.PUSH_NOTIFICATION_ALERT) != null
+                                && bundle.getString(Constants.PUSH_NOTIFICATION_ALERT) != null) {
+                            JSONObject dataNotificationPayLoad = new JSONObject(bundle.getString(Constants.PUSH_NOTIFICATION_ALERT));
+                            if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_PLATFORM) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_PLATFORM) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_PLATFORM)) {
+                                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && !dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
+                                    if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.LOGIN_USER_ID_KEY) && dataNotificationPayLoad.get(Constants.LOGIN_USER_ID_KEY) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY) != null) {
+                                        if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, EngagementSdk.getSingletonInstance().getContext()) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, EngagementSdk.getSingletonInstance().getContext()))) {
+                                            try {
+                                                if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
+                                                        ) {
+                                                    LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
+                                                }
+                                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                                                LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            PushSeenViewApiController.getSingletonInstance().hitSeenApi(new UserActionsListener() {
+                                                @Override
+                                                public void onStart() {
+
+                                                }
+
+                                                @Override
+                                                public void onCompleted(JSONObject object) {
+
+                                                }
+
+                                                @Override
+                                                public void onError(String exception) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                } else if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {
+                                    if (messageActionsListener != null) {
+                                        messageActionsListener.onMessageSilent(bundle);
+                                    }
+                                }
+                            } else {
+                                if (messageActionsListener != null) {
+                                    messageActionsListener.onMessageNotPlatformEngagement(bundle);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
