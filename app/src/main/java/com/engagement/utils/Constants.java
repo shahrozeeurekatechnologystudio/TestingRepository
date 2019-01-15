@@ -34,6 +34,7 @@ public class Constants {
     public static final String LOGIN_USER_SESSION_TOKEN_KEY = "authToken";
     public static final int EXPIRE_TIME = 5;
     public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
+    public static final String CLOSE_DIALOG_WITH_HTTPS = "https://closeme.engagement.com";
     public static final String COMPANY_KEY = "company_key";
     public static final String LANGUAGE_KEY = "language_key";
     public static final String ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD = "engagement_push_notification_data_payload";

@@ -82,7 +82,7 @@ public class EngagementDialogMessageMiddleFull extends Dialog {
             }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(Constants.CLOSE_DIALOG)) {
+                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
                     EngagementDialogMessageMiddleFull.this.dismiss();
                 } else {
                     try {
