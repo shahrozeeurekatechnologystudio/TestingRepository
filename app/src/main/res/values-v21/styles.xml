@@ -21,21 +21,21 @@
 
         <item name="android:textAppearance">@style/CustomTextAppearance</item>
     </style>
-    <style name="engagement_dialog_style_animation_middle" parent="Base.Theme.AppCompat.Dialog">
+    <style name="engagement_dialog_style_animation_middle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimAmount">0.70</item>
     </style>
-    <style name="engagement_dialog_style_animation_full_screen" parent="Base.Theme.AppCompat.Dialog">
+    <style name="engagement_dialog_style_animation_full_screen">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-    <style name="engagement_dialog_style_animation_banner" parent="Base.Theme.AppCompat.Dialog">
+    <style name="engagement_dialog_style_animation_banner">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-    <style name="engagement_dialog_style_animation_bottom" parent="Base.Theme.AppCompat.Dialog">
+    <style name="engagement_dialog_style_animation_bottom">
         <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
-    <style name="engagement_dialog_style_animation_top" parent="Base.Theme.AppCompat.Dialog">
+    <style name="engagement_dialog_style_animation_top">
         <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
