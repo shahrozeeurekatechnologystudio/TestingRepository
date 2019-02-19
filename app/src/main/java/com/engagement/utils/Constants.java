@@ -27,6 +27,8 @@ public class Constants {
     public static final String MESSAGE_KEY_TYPE_POSITION = "position";
     public static final String MESSAGE_KEY_TYPE_PUSH = "push";
     public static final String MESSAGE_KEY_TYPE_DIALOG = "dialogue";
+    public static final String MESSAGE_KEY_TYPE_FULL_SCREEN = "full screen";
+    public static final String MESSAGE_KEY_TYPE_BANNER = "banner";
     public static final String POSITION_TOP = "top";
     public static final String POSITION_BOTTOM = "bottom";
     public static final String POSITION_MIDDLE = "middle";

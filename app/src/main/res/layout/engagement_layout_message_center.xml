@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarSize="@dimen/d_4"
-        android:scrollbarThumbHorizontal="@drawable/scrollbar"
+        android:scrollbarThumbHorizontal="@drawable/egagement_scrollbar"
         android:layout_gravity="center"
         />
 
@@ -42,7 +42,7 @@
         android:layout_alignParentTop="true"
         android:scaleType="fitCenter"
         android:layout_margin="@dimen/d_5"
-        android:src="@mipmap/popup_close"
+        android:src="@mipmap/egagement_popup_close"
         />
 
 </RelativeLayout>

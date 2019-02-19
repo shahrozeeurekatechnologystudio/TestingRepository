@@ -10,6 +10,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +27,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class EngagementPushNotificationDialog extends Dialog implements View.OnClickListener {
+public class EngagementDialogPushNotification extends Dialog implements View.OnClickListener {
 
     private Activity context;
     private ImageView ivClose;
@@ -39,8 +40,8 @@ public class EngagementPushNotificationDialog extends Dialog implements View.OnC
     private String title;
     private String msg;
 
-    public EngagementPushNotificationDialog(Activity context, String title, String msg, String icon, String backgroundColor, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
-        super(context, R.style.engagement_translateDialogAnimation_slow);
+    public EngagementDialogPushNotification(Activity context, String title, String msg, String icon, String backgroundColor, String deepLinkUri, DeepLinkActionsListener deepLinkActionsListener) {
+        super(context, R.style.engagement_dialog_style_animation_push);
         this.context = context;
         this.icon = icon;
         this.backgroundColor = backgroundColor;
@@ -49,9 +50,17 @@ public class EngagementPushNotificationDialog extends Dialog implements View.OnC
         this.title = title;
         this.msg = msg;
         setContentView(R.layout.engagement_top_generic_msg_view_push_view_dialog);
+        Window window = getWindow();
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.TOP);
-        getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow);
+        getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
         setScreenViews();

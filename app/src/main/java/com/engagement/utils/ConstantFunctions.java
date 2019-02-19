@@ -35,7 +35,7 @@ public class ConstantFunctions {
         if(path != null && !path.equalsIgnoreCase(""))
             Picasso.with(context)
                     .load(path)
-                    .error(R.mipmap.ic_tick_white)
+                    .error(R.mipmap.egagement_ic_tick_white)
                     .config(Bitmap.Config.RGB_565)
                     .into(imageView);
     }

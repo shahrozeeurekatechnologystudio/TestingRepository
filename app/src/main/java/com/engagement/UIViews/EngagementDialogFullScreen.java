@@ -7,9 +7,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,31 +17,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.engagement.R;
-import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 
 
-public class EngagementDialogMessageMiddleFull extends Dialog {
+public class EngagementDialogFullScreen extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
 
-    public EngagementDialogMessageMiddleFull(Activity context, String msg, String displyType) {
-        super(context, R.style.engagement_dialog_style_animation);
+    public EngagementDialogFullScreen(Activity context, String msg, String displyType) {
+        super(context, R.style.engagement_dialog_style_animation_full_screen);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow);
+        getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
-
-        if (displyType.equals("full")) {
             setContentView(R.layout.engagement_layout_message_full_screen);
             getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        } else {
-            setContentView(R.layout.engagement_layout_message_center);
-            getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            CardView cardView = (CardView) findViewById(R.id.card_view_middle_container);
-            cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
-        }
+        Window window = getWindow();
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         this.context = context;
         setScreenViews();
         setWebViewClient();
@@ -60,7 +59,7 @@ public class EngagementDialogMessageMiddleFull extends Dialog {
 
             @Override
             public void onClick(View v) {
-                EngagementDialogMessageMiddleFull.this.dismiss();
+                EngagementDialogFullScreen.this.dismiss();
 
             }
         });
@@ -83,7 +82,7 @@ public class EngagementDialogMessageMiddleFull extends Dialog {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
-                    EngagementDialogMessageMiddleFull.this.dismiss();
+                    EngagementDialogFullScreen.this.dismiss();
                 } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);

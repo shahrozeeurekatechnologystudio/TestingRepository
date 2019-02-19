@@ -27,7 +27,7 @@
                 android:layout_marginLeft="@dimen/d_10"
                 android:layout_marginStart="@dimen/d_10"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/ic_tick_white" />
+                android:src="@mipmap/egagement_ic_tick_white" />
 
             <TextView
                 android:id="@+id/tv_title"
@@ -71,7 +71,7 @@
                 android:maxHeight="@dimen/d_100"
                 android:scrollbars="vertical"
                 android:scrollbarSize="@dimen/d_3"
-                android:scrollbarThumbHorizontal="@drawable/scrollbar"
+                android:scrollbarThumbHorizontal="@drawable/egagement_scrollbar"
                 android:textColor="@android:color/black"
                 android:textColorLink="@color/color_blue"
                 android:textSize="@dimen/t_title_3"
@@ -84,6 +84,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/d_5"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/popup_close" />
+                android:src="@mipmap/egagement_popup_close" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
