@@ -54,6 +54,7 @@ public class EngagementDialogMiddle extends Dialog {
     @SuppressLint("SetJavaScriptEnabled")
     private void setScreenViews() {
         webViewBanner = (WebView) findViewById(R.id.webView_msg_center);
+        webViewBanner.setOverScrollMode(View.OVER_SCROLL_NEVER);
         WebSettings webSettings = webViewBanner.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setGeolocationEnabled(true);

@@ -65,6 +65,7 @@ public class EngagementDialogBottom extends Dialog {
     @SuppressLint("SetJavaScriptEnabled")
     private void setScreenViews() {
         webViewBanner = (WebView) findViewById(R.id.webView_banner_top);
+        webViewBanner.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webViewBanner.setVerticalScrollBarEnabled(false);
         webViewBanner.setHorizontalScrollBarEnabled(false);
         WebSettings webSettings = webViewBanner.getSettings();
