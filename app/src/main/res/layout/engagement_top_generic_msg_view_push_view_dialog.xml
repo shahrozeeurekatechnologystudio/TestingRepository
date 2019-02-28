@@ -43,7 +43,7 @@
             android:layout_toLeftOf="@+id/iv_close"
             android:layout_toEndOf="@+id/iv_push"
             android:layout_toRightOf="@+id/iv_push"
-            android:scrollbarThumbVertical="@drawable/egagement_scrollbar">
+            android:scrollbars="none">
 
             <RelativeLayout
                 android:layout_width="match_parent"
