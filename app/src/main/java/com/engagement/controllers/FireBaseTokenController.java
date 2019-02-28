@@ -4,6 +4,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.engagement.EngagementSdk;
+import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
 import com.engagement.utils.Constants;
@@ -16,7 +17,7 @@ import org.json.JSONObject;
 public class FireBaseTokenController {
 
 
-    public static void sendRegistrationToServer(String token) {
+    public static void sendRegistrationToServer(String token,UserActionsListener userActionsListener) {
         try {
             if (EngagementSdk.getSingletonInstance() != null &&
                     EngagementSdk.getSingletonInstance().getContext()!= null &&
@@ -29,7 +30,7 @@ public class FireBaseTokenController {
                 params.put("is_login",
                         true);
                 RestCalls myReq = new RestCalls(Request.Method.POST, ApiUrl.getRegisterTokenLink(),
-                        params, responseListener(false),
+                        params, responseListener(false,userActionsListener),
                         errorListener());
                 EngagementSdk.getSingletonInstance().getRequestQueue().add(myReq);
             }
@@ -41,7 +42,7 @@ public class FireBaseTokenController {
 
     }
 
-    public static void sendRegistrationToServerExpireOnLogOut(String token) {
+    public static void sendRegistrationToServerExpireOnLogOut(String token,UserActionsListener userActionsListener) {
         try {
             if (EngagementSdk.getSingletonInstance() != null &&
                     EngagementSdk.getSingletonInstance().getContext()!= null &&
@@ -54,7 +55,7 @@ public class FireBaseTokenController {
                 params.put("is_login",
                         false);
                 RestCalls myReq = new RestCalls(Request.Method.POST, ApiUrl.getRegisterTokenLink(),
-                        params, responseListener(true),
+                        params, responseListener(true,userActionsListener),
                         errorListener());
                 EngagementSdk.getSingletonInstance().getRequestQueue().add(myReq);
             }
@@ -66,7 +67,7 @@ public class FireBaseTokenController {
 
     }
 
-    private static Response.Listener<JSONObject> responseListener(final boolean isLogoutUser) {
+    private static Response.Listener<JSONObject> responseListener(final boolean isLogoutUser,final UserActionsListener userActionsListener) {
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -91,16 +92,24 @@ public class FireBaseTokenController {
                                 }
                             }
                         }
-
+                        if (userActionsListener != null) {
+                            userActionsListener.onCompleted(response);
+                        }
                     } else {
                         if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
                                 response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
                             EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
+                            }
                         }
+
                     }
 
                 } catch (Exception e) {
-
+                    if (userActionsListener != null) {
+                        userActionsListener.onError(e.toString());
+                    }
                     e.printStackTrace();
                 }
 

@@ -114,8 +114,8 @@ public class EngagementSdk {
         return engagementUser;
     }
 
-    public void sdkLogOut(String fcmToken) {
-        FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken);
+    public void sdkLogOut(String fcmToken,UserActionsListener userActionsListener) {
+        FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken,userActionsListener);
         setEngagementUser(null);
         ConstantFunctions.setUserDefaultNull();
         //sInstance = null;
