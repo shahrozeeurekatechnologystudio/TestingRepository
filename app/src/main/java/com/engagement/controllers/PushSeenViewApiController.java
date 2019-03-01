@@ -47,7 +47,7 @@ public class PushSeenViewApiController {
                 }
                 if(actualUrl!=null && !actualUrl.equalsIgnoreCase(""))
                 {
-                    params.put("actual_url", actualUrl);
+                    params.put("action_url", actualUrl);
                 }
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
                         params, responseListener(),
