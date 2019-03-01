@@ -95,6 +95,13 @@ public class EngagementDialogMiddle extends Dialog {
                     EngagementDialogMiddle.this.dismiss();
                 }else if (!url.startsWith(Constants.IS_HTTPS) || !url.startsWith(Constants.IS_HTTP) || !url.startsWith(Constants.IS_WWW)
                         || !url.startsWith(Constants.IS_HTTPS_SLASH) || !url.startsWith(Constants.IS_HTTP_SLASH)) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        getContext().startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_IN_APP_VIEWED_CLICKED,url,new UserActionsListener() {
                         @Override
                         public void onStart() {
