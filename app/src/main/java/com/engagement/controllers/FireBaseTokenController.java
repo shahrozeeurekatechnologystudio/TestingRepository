@@ -31,12 +31,24 @@ public class FireBaseTokenController {
                         true);
                 RestCalls myReq = new RestCalls(Request.Method.POST, ApiUrl.getRegisterTokenLink(),
                         params, responseListener(false,userActionsListener),
-                        errorListener());
+                        errorListener(userActionsListener));
                 EngagementSdk.getSingletonInstance().getRequestQueue().add(myReq);
+            }
+            else {
+                if (userActionsListener != null) {
+                    userActionsListener.onError("");
+                }
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            if (userActionsListener != null) {
+                if(e.toString()!=null)
+                    userActionsListener.onError(e.toString());
+                else
+                    userActionsListener.onError("");
+
+            }
         }
 
 
@@ -56,12 +68,24 @@ public class FireBaseTokenController {
                         false);
                 RestCalls myReq = new RestCalls(Request.Method.POST, ApiUrl.getRegisterTokenLink(),
                         params, responseListener(true,userActionsListener),
-                        errorListener());
+                        errorListener(userActionsListener));
                 EngagementSdk.getSingletonInstance().getRequestQueue().add(myReq);
+            }
+            else {
+                if (userActionsListener != null) {
+                    userActionsListener.onError("");
+                }
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            if (userActionsListener != null) {
+                if(e.toString()!=null)
+                  userActionsListener.onError(e.toString());
+                else
+                    userActionsListener.onError("");
+
+            }
         }
 
 
@@ -103,12 +127,21 @@ public class FireBaseTokenController {
                                 userActionsListener.onError(response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
                             }
                         }
+                        else{
+                            if (userActionsListener != null) {
+                                userActionsListener.onError("");
+                            }
+                        }
 
                     }
 
                 } catch (Exception e) {
                     if (userActionsListener != null) {
-                        userActionsListener.onError(e.toString());
+                        if(e.toString()!=null)
+                            userActionsListener.onError(e.toString());
+                        else
+                            userActionsListener.onError("");
+
                     }
                     e.printStackTrace();
                 }
@@ -117,16 +150,32 @@ public class FireBaseTokenController {
         };
     }
 
-    private static Response.ErrorListener errorListener() {
+    private static Response.ErrorListener errorListener(final UserActionsListener userActionsListener) {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
                     if (error != null && error.toString() != null) {
                         EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, error.toString());
+                        if (userActionsListener != null) {
+                            userActionsListener.onError(error.toString());
+
+                        }
+                    }
+                    else{
+                        if (userActionsListener != null) {
+                            userActionsListener.onError("");
+                        }
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
+                    if (userActionsListener != null) {
+                        if(e.toString()!=null)
+                            userActionsListener.onError(e.toString());
+                        else
+                            userActionsListener.onError("");
+
+                    }
 
                 }
             }
