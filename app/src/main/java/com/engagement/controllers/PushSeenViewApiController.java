@@ -29,7 +29,56 @@ public class PushSeenViewApiController {
     public void hitSeenApi(UserActionsListener userActionsListener) {
         hitSeenApiRestCalls(userActionsListener);
     }
+    public void hitSeenApi(String mode,String actualUrl,UserActionsListener userActionsListener) {
+        hitSeenApiRestCalls(mode, actualUrl,userActionsListener);
+    }
+    private void hitSeenApiRestCalls(String mode,String actualUrl,UserActionsListener userActionsListener) {
+        JSONObject params = new JSONObject();
+        try {
+            this.userActionsListener = userActionsListener;
+            if (userActionsListener != null) {
+                userActionsListener.onStart();
+            }
+            if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
+                params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                if(mode!=null && !mode.equalsIgnoreCase(""))
+                {
+                    params.put("mode", mode);
+                }
+                if(actualUrl!=null && !actualUrl.equalsIgnoreCase(""))
+                {
+                    params.put("actual_url", actualUrl);
+                }
+                RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
+                        params, responseListener(),
+                        errorListener());
+                if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null) {
+                    EngagementSdk.getSingletonInstance().getRequestQueue().add(addActionDetailRequest);
+                }
+            } else {
+                if (userActionsListener != null) {
+                    if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getActiveActivity() != null) {
+                        userActionsListener.onError(EngagementSdk.getSingletonInstance().getActiveActivity().getResources().getString(R.string.no_campaign_receive_yet));
+                    }
+                }
+            }
 
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            try {
+                if (e.toString() != null) {
+                    if (userActionsListener != null) {
+                        userActionsListener.onError(e.toString());
+                    }
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
     private void hitSeenApiRestCalls(UserActionsListener userActionsListener) {
         JSONObject params = new JSONObject();
         try {
