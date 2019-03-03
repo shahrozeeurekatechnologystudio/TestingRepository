@@ -88,6 +88,7 @@ public class PushSeenViewApiController {
             }
             if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
                 params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                params.put("mode", Constants.MODE_IN_APP_VIEWED);
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
                         params, responseListener(),
                         errorListener());

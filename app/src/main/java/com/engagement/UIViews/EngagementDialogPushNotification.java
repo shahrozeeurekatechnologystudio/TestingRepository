@@ -18,10 +18,14 @@ import android.widget.TextView;
 
 import com.engagement.EngagementSdk;
 import com.engagement.R;
+import com.engagement.controllers.PushSeenViewApiController;
 import com.engagement.interfaces.DeepLinkActionsListener;
+import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
+
+import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -161,6 +165,22 @@ public class EngagementDialogPushNotification extends Dialog implements View.OnC
             if (deepLinkUri != null && !deepLinkUri.equalsIgnoreCase("")) {
                 if (deepLinkActionsListener != null) {
                     deepLinkActionsListener.onDeepLinkReturn(deepLinkUri.trim());
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_IN_APP_VIEWED_CLICKED,deepLinkUri.trim(),new UserActionsListener() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onCompleted(JSONObject object) {
+
+                        }
+
+                        @Override
+                        public void onError(String exception) {
+
+                        }
+                    });
                     dismiss();
                 }
             }
