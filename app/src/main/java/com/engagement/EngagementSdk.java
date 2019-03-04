@@ -114,10 +114,32 @@ public class EngagementSdk {
         return engagementUser;
     }
 
-    public void sdkLogOut(String fcmToken,UserActionsListener userActionsListener) {
-        FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken,userActionsListener);
-        setEngagementUser(null);
-        ConstantFunctions.setUserDefaultNull();
+    public void sdkLogOut(String fcmToken,final UserActionsListener userActionsListener) {
+        FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken, new UserActionsListener() {
+            @Override
+            public void onStart() {
+                if(userActionsListener!=null)
+                    userActionsListener.onStart();
+
+            }
+
+            @Override
+            public void onCompleted(JSONObject object) {
+                setEngagementUser(null);
+                ConstantFunctions.setUserDefaultNull();
+                if(userActionsListener!=null)
+                    userActionsListener.onCompleted(object);
+            }
+
+            @Override
+            public void onError(String exception) {
+                setEngagementUser(null);
+                ConstantFunctions.setUserDefaultNull();
+                if(userActionsListener!=null)
+                    userActionsListener.onError(exception);
+
+            }
+        });
         //sInstance = null;
         //context = null;
 
