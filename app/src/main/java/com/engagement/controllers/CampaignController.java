@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -248,22 +249,43 @@ public class CampaignController {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
-                                            PushSeenViewApiController.getSingletonInstance().hitSeenApi(new UserActionsListener() {
-                                                @Override
-                                                public void onStart() {
+                                            if(intent!=null && intent.getData()!=null && intent.getData().getHost() != null && intent.getData().toString()!=null)
+                                            {
+                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_VIEWED_CLICKED,intent.getData().toString(),new UserActionsListener() {
+                                                    @Override
+                                                    public void onStart() {
 
-                                                }
+                                                    }
 
-                                                @Override
-                                                public void onCompleted(JSONObject object) {
+                                                    @Override
+                                                    public void onCompleted(JSONObject object) {
 
-                                                }
+                                                    }
 
-                                                @Override
-                                                public void onError(String exception) {
+                                                    @Override
+                                                    public void onError(String exception) {
 
-                                                }
-                                            });
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(new UserActionsListener() {
+                                                    @Override
+                                                    public void onStart() {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCompleted(JSONObject object) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onError(String exception) {
+
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 } else if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.MESSAGE_KEY_TYPE_SILENT) && dataNotificationPayLoad.get(Constants.MESSAGE_KEY_TYPE_SILENT) != null && dataNotificationPayLoad.getBoolean(Constants.MESSAGE_KEY_TYPE_SILENT)) {

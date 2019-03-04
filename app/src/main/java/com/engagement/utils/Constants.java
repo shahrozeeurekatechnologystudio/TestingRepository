@@ -41,8 +41,9 @@ public class Constants {
     public static final String IS_HTTPS_SLASH = "https://";
     public static final String IS_HTTP_SLASH = "http://";
     public static final String IS_WWW = "www";
-    public static final String MODE_IN_APP_VIEWED_CLICKED = "clicked";
-    public static final String MODE_IN_APP_VIEWED = "viewed";
+    public static final String MODE_CLICKED = "clicked";
+    public static final String MODE_VIEWED_CLICKED = "both";
+    public static final String MODE_VIEWED = "viewed";
     public static final String CLOSE_DIALOG_WITH_HTTPS = "https://closeme.engagement.com";
     public static final String COMPANY_KEY = "company_key";
     public static final String LANGUAGE_KEY = "language_key";

@@ -165,7 +165,7 @@ public class EngagementDialogPushNotification extends Dialog implements View.OnC
             if (deepLinkUri != null && !deepLinkUri.equalsIgnoreCase("")) {
                 if (deepLinkActionsListener != null) {
                     deepLinkActionsListener.onDeepLinkReturn(deepLinkUri.trim());
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_IN_APP_VIEWED_CLICKED,deepLinkUri.trim(),new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,deepLinkUri,new UserActionsListener() {
                         @Override
                         public void onStart() {
 

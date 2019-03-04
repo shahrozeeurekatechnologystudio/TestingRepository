@@ -105,8 +105,7 @@ public class EngagementDialogBottom extends Dialog {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
                     EngagementDialogBottom.this.dismiss();
-                } else if (!url.startsWith(Constants.IS_HTTPS) || !url.startsWith(Constants.IS_HTTP) || !url.startsWith(Constants.IS_WWW)
-                        || !url.startsWith(Constants.IS_HTTPS_SLASH) || !url.startsWith(Constants.IS_HTTP_SLASH)) {
+                } else  {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
@@ -114,7 +113,7 @@ public class EngagementDialogBottom extends Dialog {
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_IN_APP_VIEWED_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
                         @Override
                         public void onStart() {
 
@@ -131,14 +130,6 @@ public class EngagementDialogBottom extends Dialog {
                         }
                     });
 
-                }else {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
                 }
 
                 return true;
