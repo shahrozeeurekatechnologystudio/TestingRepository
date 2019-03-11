@@ -33,7 +33,7 @@ public class ConstantFunctions {
     }
     public static void loadRGBImage(Context context, String path, ImageView imageView) {
         if(path != null && !path.equalsIgnoreCase(""))
-            Picasso.with(context)
+            Picasso.get()
                     .load(path)
                     .error(R.mipmap.egagement_ic_tick_white)
                     .config(Bitmap.Config.RGB_565)
