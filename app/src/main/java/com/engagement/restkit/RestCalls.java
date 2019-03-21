@@ -76,28 +76,6 @@ public class RestCalls extends JsonObjectRequest {
             return Response.error(new ParseError(je));
         }
     }
-    private String createJWT() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getDefault());
-        calendar.add(Calendar.MINUTE, Constants.EXPIRE_TIME);
-        JwtBuilder builder = null;
-        if (EngagementSdk.getSingletonInstance() != null &&
-                EngagementSdk.getSingletonInstance().getContext() != null && !LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, "").equalsIgnoreCase("") &&
-        !LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, "").equalsIgnoreCase("")) {
-            builder = Jwts.builder()
-                    .setExpiration(calendar.getTime())
-                    .claim("company_key", LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""))
-                    .claim("user_token", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, ""))
-                    .signWith(SignatureAlgorithm.HS256, LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""));
-        } else if (EngagementSdk.getSingletonInstance() != null &&
-                EngagementSdk.getSingletonInstance().getContext() != null && !LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, "").equalsIgnoreCase("")) {
-            builder = Jwts.builder()
-                    .setExpiration(calendar.getTime())
-                    .claim("company_key", LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""))
-                    .signWith(SignatureAlgorithm.HS256, LoginUserInfo.getValueForKey(Constants.COMPANY_KEY, ""));
-        }
-        return builder.compact();
-    }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
@@ -110,15 +88,15 @@ public class RestCalls extends JsonObjectRequest {
             headers.put("Content-Type", "application/json");
             headers.put("Accept-Language",
                     "en;q=1, fr;q=0.9, de;q=0.8, zh-Hans;q=0.7, zh-Hant;q=0.6, ja;q=0.5");
-            headers.put("Authorization", createJWT());
+            headers.put("Authorization", LoginUserInfo.getValueForKey(Constants.LOGIN_COMPANY_SESSION_TOKEN_KEY,""));
             PackageInfo pInfo = null;
             try {
                 pInfo = EngagementSdk.getSingletonInstance().getContext().getPackageManager().getPackageInfo(EngagementSdk.getSingletonInstance().getContext().getPackageName(), 0);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            headers.put("build", pInfo.versionCode + "");
-            headers.put("version", pInfo.versionName);
+            headers.put("app-build", pInfo.versionCode + "");
+            headers.put("app-version", pInfo.versionName);
             headers.put("device-type", "android");
             headers.put("timezone", TimeZone.getDefault().getID());
             headers.put("app-id", pInfo.packageName);

@@ -10,11 +10,13 @@ public class EngagementUser implements Parcelable {
 
     private String firstName;
     private String lastName;
+    private String userName;
     private String language;
     private String latitude;
     private String longitude;
     private String companyKey;
     private String email;
+    private String deviceToken;
     private String emailNotificationSubscription;
     private boolean isPushBannerIconHidden=true;
     private String pushNotificationBarHideTimeInMilliseconds;
@@ -104,6 +106,14 @@ public class EngagementUser implements Parcelable {
 
     public void setPushBannerIconHidden(boolean pushBannerIconHidden) {
         isPushBannerIconHidden = pushBannerIconHidden;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     public void setCountry(String country) {
@@ -221,6 +231,14 @@ public class EngagementUser implements Parcelable {
         return pushNotificationHeaderBodyTextColor;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public void setPushNotificationHeaderBodyTextColor(String pushNotificationHeaderBodyTextColor) {
         this.pushNotificationHeaderBodyTextColor = pushNotificationHeaderBodyTextColor;
     }
@@ -233,16 +251,19 @@ public class EngagementUser implements Parcelable {
         this.pushNotificationHeaderBodyTextSize = pushNotificationHeaderBodyTextSize;
     }
 
+
     @Override
     public String toString() {
         return "EngagementUser{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
                 ", language='" + language + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", companyKey='" + companyKey + '\'' +
                 ", email='" + email + '\'' +
+                ", deviceToken='" + deviceToken + '\'' +
                 ", emailNotificationSubscription='" + emailNotificationSubscription + '\'' +
                 ", isPushBannerIconHidden=" + isPushBannerIconHidden +
                 ", pushNotificationBarHideTimeInMilliseconds='" + pushNotificationBarHideTimeInMilliseconds + '\'' +
@@ -262,7 +283,6 @@ public class EngagementUser implements Parcelable {
                 '}';
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -272,11 +292,13 @@ public class EngagementUser implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
+        dest.writeString(this.userName);
         dest.writeString(this.language);
         dest.writeString(this.latitude);
         dest.writeString(this.longitude);
         dest.writeString(this.companyKey);
         dest.writeString(this.email);
+        dest.writeString(this.deviceToken);
         dest.writeString(this.emailNotificationSubscription);
         dest.writeByte(this.isPushBannerIconHidden ? (byte) 1 : (byte) 0);
         dest.writeString(this.pushNotificationBarHideTimeInMilliseconds);
@@ -301,11 +323,13 @@ public class EngagementUser implements Parcelable {
     protected EngagementUser(Parcel in) {
         this.firstName = in.readString();
         this.lastName = in.readString();
+        this.userName = in.readString();
         this.language = in.readString();
         this.latitude = in.readString();
         this.longitude = in.readString();
         this.companyKey = in.readString();
         this.email = in.readString();
+        this.deviceToken = in.readString();
         this.emailNotificationSubscription = in.readString();
         this.isPushBannerIconHidden = in.readByte() != 0;
         this.pushNotificationBarHideTimeInMilliseconds = in.readString();

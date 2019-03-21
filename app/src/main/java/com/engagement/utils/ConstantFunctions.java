@@ -2,6 +2,7 @@ package com.engagement.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.widget.ImageView;
 
 import com.engagement.R;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +34,16 @@ public class ConstantFunctions {
 
         }
         return date;
+    }
+    public static JSONObject appendCommonParameterTORequest(JSONObject params) {
+        try {
+                params.put(Constants.RESOURCE_KEY, Constants.RESOURCE_VALUE);
+                params.put(Constants.METHOD_KEY, Constants.METHOD_VALUE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return params;
     }
     public static void loadRGBImage(Context context, String path, ImageView imageView) {
         if(path != null && !path.equalsIgnoreCase(""))

@@ -12,15 +12,13 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.engagement.controllers.CampaignController;
 import com.engagement.controllers.FireBaseTokenController;
-import com.engagement.controllers.RegisterUserController;
+import com.engagement.controllers.UserActionController;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.utils.ConstantFunctions;
-import com.engagement.utils.Constants;
-import com.engagement.utils.LoginUserInfo;
 
 
 import org.json.JSONObject;
@@ -73,7 +71,7 @@ public class EngagementSdk {
     public void registerEngagementUser(EngagementUser engagementUser, JSONObject extraParams, final UserActionsListener userActionsListener) {
         if (engagementUser != null)
             this.engagementUser = engagementUser;
-        RegisterUserController.getSingletonInstance().registerUser(engagementUser, extraParams, userActionsListener);
+        UserActionController.getSingletonInstance().hitUserAction(engagementUser, extraParams, userActionsListener);
     }
 
     public static void sdkInitialize(Application context, String engagementSdkBaseUrl) {
