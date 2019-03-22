@@ -9,6 +9,7 @@ import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
 import com.engagement.utils.ActionsEnums;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
@@ -35,7 +36,7 @@ public class SendActionController {
         if (params != null && (EngagementSdk.getSingletonInstance() != null &&
                 EngagementSdk.getSingletonInstance().getContext()!= null &&
                 LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null)) {
-
+            JSONObject jsonObjectSendToApi = new JSONObject();
             try {
                 this.userActionsListener = userActionsListener;
                 if (userActionsListener != null) {
@@ -43,8 +44,10 @@ public class SendActionController {
                 }
                 params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 if (actionsEnum == ActionsEnums.ACTION) {
+                    ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_CAMPAIGN_ACTION_TRIGGER_VALUE, Constants.METHOD_SEND_VALUE);
+                    jsonObjectSendToApi.put("data", params);
                     RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST,  ApiUrl.getCampaignTriggerEventUrl(),
-                            params, responseListener(),
+                            jsonObjectSendToApi, responseListener(),
                             errorListener());
                     EngagementSdk.getSingletonInstance().getRequestQueue().add(addActionDetailRequest);
                 } else if (actionsEnum == ActionsEnums.CONVERSION) {
@@ -52,8 +55,10 @@ public class SendActionController {
                             && !LoginUserInfo.getValueForKey(Constants.TRACK_KEY,"").equalsIgnoreCase("")) {
                         params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY,""));
                         params.put("campaign_receive_date",LoginUserInfo.getValueForKey(Constants.CAMPAIGN_RECEIVE_DATE,""));
+                        ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_CAMPAIGN_CONVERSION_TRIGGER_VALUE, Constants.METHOD_SEND_VALUE);
+                        jsonObjectSendToApi.put("data", params);
                         RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getConversionTriggerEventUrl(),
-                                params, responseListener(),
+                                jsonObjectSendToApi, responseListener(),
                                 errorListener());
                         EngagementSdk.getSingletonInstance().getRequestQueue().add(addActionDetailRequest);
                     }
@@ -95,14 +100,12 @@ public class SendActionController {
 
 
                     } else {
-                        if (userActionsListener != null && response.getString(Constants.API_RESPONSE_MESSAGE_KEY) != null) {
-                            userActionsListener.onError(response.getString(Constants.API_RESPONSE_MESSAGE_KEY));
+                        if (response != null && response.toString() != null) {
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.toString());
+                            }
+                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                         }
-                        if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
-                                response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
-                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
-                        }
-
                     }
                 } catch (Exception e) {
                     if (userActionsListener != null) {

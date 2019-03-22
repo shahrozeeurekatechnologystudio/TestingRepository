@@ -7,6 +7,7 @@ import com.engagement.EngagementSdk;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
@@ -32,19 +33,22 @@ public class ApiTriggerController {
     private void registerTriggerActionRestCalls(String campaignCode, JSONObject extraParams, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
-            JSONObject params = new JSONObject();
+            JSONObject jsonObjectSendToApi = new JSONObject();
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_CAMPAIGN_API_TRIGGER_VALUE, Constants.METHOD_SEND_VALUE);
+            if (extraParams == null) {
+                extraParams = new JSONObject();
+            }
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
-                    params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                extraParams.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
             if (campaignCode != null && !campaignCode.equalsIgnoreCase("")) {
-                params.put("campaign_code", campaignCode);
+                extraParams.put("campaign_code", campaignCode);
             }
-            if (extraParams != null)
-                params.put("extra_params", extraParams);
+            jsonObjectSendToApi.put("data", extraParams);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getApiTriggerLink(),
-                    params, responseListener(),
+                    jsonObjectSendToApi, responseListener(),
                     errorListener());
             if (userActionsListener != null) {
                 userActionsListener.onStart();
@@ -78,13 +82,13 @@ public class ApiTriggerController {
 
 
                     } else {
-                        if (userActionsListener != null && response.getString(Constants.API_RESPONSE_MESSAGE_KEY) != null) {
-                            userActionsListener.onError(response.getString(Constants.API_RESPONSE_MESSAGE_KEY));
+                        if (response != null && response.toString() != null) {
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.toString());
+                            }
+                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                         }
-                        if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
-                                response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
-                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
-                        }
+
 
                     }
                 } catch (Exception e) {

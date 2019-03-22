@@ -249,9 +249,8 @@ public class CampaignController {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
-                                            if(intent!=null && intent.getData()!=null && intent.getData().getHost() != null && intent.getData().toString()!=null)
-                                            {
-                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_VIEWED_CLICKED,intent.getData().toString(),new UserActionsListener() {
+                                            if (intent != null && intent.getData() != null && intent.getData().getHost() != null && intent.getData().toString() != null) {
+                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_VIEWED_CLICKED, intent.getData().toString(), new UserActionsListener() {
                                                     @Override
                                                     public void onStart() {
 
@@ -267,8 +266,7 @@ public class CampaignController {
 
                                                     }
                                                 });
-                                            }
-                                            else {
+                                            } else {
                                                 PushSeenViewApiController.getSingletonInstance().hitSeenApi(new UserActionsListener() {
                                                     @Override
                                                     public void onStart() {
@@ -402,21 +400,23 @@ public class CampaignController {
                                     });
                                 }
                             }
-                        } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG)
-                                && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                            if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_TOP)) {
-                                showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
-                            } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_BOTTOM)) {
-                                showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
-                            } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
-                                showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                        } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_INAPP)) {
+                            if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG)
+                                    && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
+                                if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_TOP)) {
+                                    showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_BOTTOM)) {
+                                    showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
+                                    showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                }
+                            } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_FULL_SCREEN)
+                                    && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
+                                showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                            } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_BANNER)
+                                    && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
+                                showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                             }
-                        } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_FULL_SCREEN)
-                                && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                            showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
-                        } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_BANNER)
-                                && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                            showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                         }
                     }
                 }
@@ -461,6 +461,7 @@ public class CampaignController {
         });
 
     }
+
     private void showBanner(final Activity context, final String msg) {
         context.runOnUiThread(new Runnable() {
             public void run() {

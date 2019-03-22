@@ -26,11 +26,11 @@ public class CompanyLoginController {
         return instance;
     }
 
-    public void registerTriggerAction(UserActionsListener userActionsListener) {
-        registerTriggerActionRestCalls(userActionsListener);
+    public void companyLogin(UserActionsListener userActionsListener) {
+        companyLoginRestCalls(userActionsListener);
     }
 
-    private void registerTriggerActionRestCalls(UserActionsListener userActionsListener) {
+    private void companyLoginRestCalls(UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();

@@ -7,6 +7,7 @@ import com.engagement.EngagementSdk;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
@@ -25,28 +26,31 @@ public class NewsFeedController {
         return instance;
     }
 
-    public void getNewsFeedController(String template, String latitude,String longitude, UserActionsListener userActionsListener) {
-        getNewsFeedControllerRestCalls(template,latitude, longitude,userActionsListener);
+    public void getNewsFeedController(String template, String latitude, String longitude, UserActionsListener userActionsListener) {
+        getNewsFeedControllerRestCalls(template, latitude, longitude, userActionsListener);
     }
 
-    private void getNewsFeedControllerRestCalls(String template, String latitude,String longitude, UserActionsListener userActionsListener) {
+    private void getNewsFeedControllerRestCalls(String template, String latitude, String longitude, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
+            ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_NEWS_FEED_VALUE, Constants.METHOD_LISTING_VALUE);
+            JSONObject paramsData = new JSONObject();
             if (template != null && !template.equalsIgnoreCase("")) {
-                params.put("template", template);
+                paramsData.put("template", template);
             }
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
-                params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
             if (latitude != null && !latitude.equalsIgnoreCase("")) {
-                params.put("latitude", latitude);
+                paramsData.put("latitude", latitude);
             }
             if (longitude != null && !longitude.equalsIgnoreCase("")) {
-                params.put("longitude", longitude);
+                paramsData.put("longitude", longitude);
             }
+            params.put("data", paramsData);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getNewsFeedUrl(),
                     params, responseListener(),
                     errorListener());
@@ -82,12 +86,11 @@ public class NewsFeedController {
 
 
                     } else {
-                        if (userActionsListener != null && response.getString(Constants.API_RESPONSE_MESSAGE_KEY) != null) {
-                            userActionsListener.onError(response.getString(Constants.API_RESPONSE_MESSAGE_KEY));
-                        }
-                        if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
-                                response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
-                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
+                        if (response != null && response.toString() != null) {
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.toString());
+                            }
+                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                         }
 
                     }

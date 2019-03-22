@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.engagement.EngagementSdk;
+
 
 public class EngagementSdkLog {
 
@@ -18,7 +20,10 @@ public class EngagementSdkLog {
      * When Export Android Application with release key, it returns false
      */
     public static boolean loggingEnabled() {
-        return true;
+        if (EngagementSdk.getSingletonInstance() != null)
+            return EngagementSdk.getSingletonInstance().isSdkLogEnable();
+        else
+            return false;
     }
 
     public static void logDebug(String message) {

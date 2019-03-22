@@ -3,14 +3,14 @@ package com.engagement.restkit;
 public class ApiUrl {
     private static final String USER_ACTION_LINK = "/";
     private static final String COMPANY_LOGIN_LINK = "/login";
-    private static final String API_TRIGGER_LINK = "/create/campaign/api/trigger";
+    private static final String API_TRIGGER_LINK = "/";
     private static final String REGISTER_USER_URL = "/initialize/platform";
-    private static final String NEWS_FEED_URL = "/newsfeed/get_news";
-    private static final String CAMPAIGN_TRIGGER_EVENT_URL = "/create/campaign/action/trigger";
-    private static final String PUSH_TRACK_VIEW_URL = "/push/tracking/service";
-    private static final String LIST_TRIGGER_EVENT_URL = "/get/action/list";
+    private static final String NEWS_FEED_URL = "/";
+    private static final String CAMPAIGN_TRIGGER_EVENT_URL = "/";
+    private static final String PUSH_TRACK_VIEW_URL = "/";
+    private static final String LIST_TRIGGER_EVENT_URL = "/";
     private static final String LIST_USER_ACTIONS_CONVERSIONS_RECORDED = "/get/user/actions";
-    private static final String CONVERSION_TRIGGER_EVENT_URL = "/create/campaign/conversion";
+    private static final String CONVERSION_TRIGGER_EVENT_URL = "/";
     private static String SITE_PREFIX = null;
 
     public static String getSitePrefix() {

@@ -35,10 +35,10 @@ public class ConstantFunctions {
         }
         return date;
     }
-    public static JSONObject appendCommonParameterTORequest(JSONObject params) {
+    public static JSONObject appendCommonParameterTORequest(JSONObject params,String resource,String method) {
         try {
-                params.put(Constants.RESOURCE_KEY, Constants.RESOURCE_VALUE);
-                params.put(Constants.METHOD_KEY, Constants.METHOD_VALUE);
+                params.put(Constants.RESOURCE_KEY, resource);
+                params.put(Constants.METHOD_KEY, method);
 
         } catch (Exception e) {
             e.printStackTrace();

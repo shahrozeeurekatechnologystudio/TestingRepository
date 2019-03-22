@@ -28,15 +28,17 @@ public class UserActionController {
         return instance;
     }
 
-    public void hitUserAction(UserActionsModeEnums userActionsModeEnums, EngagementUser engagementUser, UserActionsListener userActionsListener) {
-        hitUserActionRestCalls(userActionsModeEnums,engagementUser, userActionsListener);
+    public void hitUserAction(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+        hitUserActionRestCalls(engagementUser, userActionsModeEnums, userActionsListener);
     }
-    public void updateInfo(UserActionsModeEnums userActionsModeEnums,JSONObject extraParams, UserActionsListener userActionsListener) {
-        updateInfoRestCalls(userActionsModeEnums,extraParams, userActionsListener);
+
+    public void updateInfo(JSONObject extraParams, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+        updateInfoRestCalls(extraParams, userActionsModeEnums, userActionsListener);
     }
-    private void hitUserActionRestCalls(UserActionsModeEnums userActionsModeEnums,EngagementUser engagementUser,UserActionsListener userActionsListener) {
+
+    private void hitUserActionRestCalls(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
         try {
-            if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext()!=null
+            if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null
                     && engagementUser != null) {
                 if (engagementUser.getCompanyKey() != null
                         && !engagementUser.getCompanyKey().equalsIgnoreCase("")) {
@@ -49,10 +51,10 @@ public class UserActionController {
             }
             this.userActionsListener = userActionsListener;
             JSONObject jsonObjectParams = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams);
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams,Constants.RESOURCE_USER_VALUE,Constants.METHOD_SUBSCRIBE_VALUE);
             JSONObject params = new JSONObject();
-            if(engagementUser!=null) {
-                params.put(Constants.MODE_KEY,userActionsModeEnums);
+            if (engagementUser != null) {
+                params.put(Constants.MODE_KEY, userActionsModeEnums);
                 params.put("user_id", engagementUser.getUserID());
                 params.put("firstname", engagementUser.getFirstName());
                 params.put("lastname", engagementUser.getLastName());
@@ -73,7 +75,7 @@ public class UserActionController {
                     params.put("latitude", engagementUser.getLatitude());
                 }
             }
-            jsonObjectParams.put("data",params);
+            jsonObjectParams.put("data", params);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getUserActionLink(),
                     params, responseListener(),
                     errorListener());
@@ -95,18 +97,19 @@ public class UserActionController {
             }
         }
     }
-    private void updateInfoRestCalls(UserActionsModeEnums userActionsModeEnums,JSONObject extraParams,UserActionsListener userActionsListener) {
+
+    private void updateInfoRestCalls(JSONObject extraParams, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject jsonObjectParams = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams);
-            extraParams.put(Constants.MODE_KEY,userActionsModeEnums);
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams,Constants.RESOURCE_USER_VALUE,Constants.METHOD_SUBSCRIBE_VALUE);
+            extraParams.put(Constants.MODE_KEY, userActionsModeEnums);
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                 extraParams.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
-            jsonObjectParams.put("data",extraParams);
+            jsonObjectParams.put("data", extraParams);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getUserActionLink(),
                     jsonObjectParams, responseListener(),
                     errorListener());
@@ -128,6 +131,7 @@ public class UserActionController {
             }
         }
     }
+
     private Response.Listener<JSONObject> responseListener() {
         return new Response.Listener<JSONObject>() {
             @Override

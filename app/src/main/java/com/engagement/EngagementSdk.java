@@ -11,75 +11,109 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.engagement.controllers.CampaignController;
-import com.engagement.controllers.FireBaseTokenController;
+import com.engagement.controllers.CompanyLoginController;
 import com.engagement.controllers.UserActionController;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.restkit.ApiUrl;
-import com.engagement.utils.ConstantFunctions;
-
+import com.engagement.utils.EngagementSdkLog;
+import com.engagement.utils.UserActionsModeEnums;
 
 import org.json.JSONObject;
 
 import java.util.Map;
 
 public class EngagementSdk {
+    public static final String TAG = "VolleyPatterns";
+    private static EngagementSdk sInstance;
     private EngagementUser engagementUser;
     private Application context;
+    private boolean isSdkLogEnable;
     private Activity activeActivity;
-    public static final String TAG = "VolleyPatterns";
     private RequestQueue mRequestQueue;
-    private static EngagementSdk sInstance;
 
-    private EngagementSdk(Application applicationContext, String engagementSdkBaseUrl) {
+    private EngagementSdk(Application applicationContext, String engagementSdkBaseUrl, boolean isSdkLogEnable) {
         this.context = applicationContext;
+        this.isSdkLogEnable = isSdkLogEnable;
         setupActivityListener(applicationContext);
         ApiUrl.setSitePrefix(engagementSdkBaseUrl);
+        CompanyLoginController.getSingletonInstance().companyLogin(new UserActionsListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onCompleted(JSONObject object) {
+                if (object != null && object.toString() != null)
+                    EngagementSdkLog.logDebug(EngagementSdkLog.TAG, object.toString());
+
+            }
+
+            @Override
+            public void onError(String exception) {
+                EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, exception);
+
+            }
+        });
     }
-    private void setupActivityListener(Application  context) {
+
+    public static void sdkInitialize(Application context, String engagementSdkBaseUrl, boolean isSdkLogEnable) {
+        sInstance = new EngagementSdk(context, engagementSdkBaseUrl, isSdkLogEnable);
+    }
+
+    public static synchronized EngagementSdk getSingletonInstance() {
+        return sInstance;
+    }
+
+    public static void setEngagementSdkMsg(Context context, Map<String, String> data, JSONObject notificationPayLoad, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
+        CampaignController.getSingletonInstance().setEngagementMessage(context, data, notificationPayLoad, cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
+    }
+
+    private void setupActivityListener(Application context) {
         context.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             }
+
             @Override
             public void onActivityStarted(Activity activity) {
             }
+
             @Override
             public void onActivityResumed(Activity activity) {
                 activeActivity = activity;
             }
+
             @Override
             public void onActivityPaused(Activity activity) {
 
             }
+
             @Override
             public void onActivityStopped(Activity activity) {
             }
+
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
             }
+
             @Override
             public void onActivityDestroyed(Activity activity) {
             }
         });
     }
-    public   Activity getActiveActivity(){
+
+    public Activity getActiveActivity() {
         return activeActivity;
     }
-    public void registerEngagementUser(EngagementUser engagementUser, JSONObject extraParams, final UserActionsListener userActionsListener) {
+
+    public void registerEngagementUser(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
         if (engagementUser != null)
             this.engagementUser = engagementUser;
-        UserActionController.getSingletonInstance().hitUserAction(engagementUser, extraParams, userActionsListener);
-    }
-
-    public static void sdkInitialize(Application context, String engagementSdkBaseUrl) {
-        sInstance = new EngagementSdk(context, engagementSdkBaseUrl);
-    }
-
-    public static synchronized EngagementSdk getSingletonInstance() {
-        return sInstance;
+        UserActionController.getSingletonInstance().hitUserAction(engagementUser, userActionsModeEnums, userActionsListener);
     }
 
     public RequestQueue getRequestQueue() {
@@ -108,12 +142,16 @@ public class EngagementSdk {
 
     }
 
-   public EngagementUser getEngagementUser() {
+    public EngagementUser getEngagementUser() {
         return engagementUser;
     }
 
-    public void sdkLogOut(String fcmToken,final UserActionsListener userActionsListener) {
-        FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken, new UserActionsListener() {
+    public void setEngagementUser(EngagementUser engagementUser) {
+        this.engagementUser = engagementUser;
+    }
+
+    public void sdkLogOut(String fcmToken, final UserActionsListener userActionsListener) {
+       /* FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken, new UserActionsListener() {
             @Override
             public void onStart() {
                 if(userActionsListener!=null)
@@ -137,22 +175,18 @@ public class EngagementSdk {
                     userActionsListener.onError(exception);
 
             }
-        });
+        });*/
         //sInstance = null;
         //context = null;
 
-    }
-
-    public void setEngagementUser(EngagementUser engagementUser) {
-        this.engagementUser = engagementUser;
     }
 
     public Application getContext() {
         return context;
     }
 
-    public static void setEngagementSdkMsg(Context context, Map<String, String> data, JSONObject notificationPayLoad, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
-        CampaignController.getSingletonInstance().setEngagementMessage(context, data,notificationPayLoad, cls, notificationStatusBarIcon, messageActionsListener,deepLinkActionsListener);
+    public boolean isSdkLogEnable() {
+        return isSdkLogEnable;
     }
 
     public void setUpdateUserLocation(String longitude, String latitude) {

@@ -5,7 +5,7 @@ public class Constants {
 
 
     public static final String PUSH_NOTIFICATION_ALERT = "alert";
-    public static final String MESSAGE_KEY_TYPE_PLATFORM = "is_hero_platform";
+    public static final String MESSAGE_KEY_TYPE_PLATFORM = "is_hermis_platform";
     public static final String MESSAGE_KEY_TYPE_SILENT = "is_silent";
     public static final String LOGIN_USER_EMAIL_KEY = "user_email";
     public static final String API_RESPONSE_META_KEY = "meta";
@@ -13,12 +13,22 @@ public class Constants {
     public static final String API_RESPONSE_TOKEN_KEY = "token";
     public static final String API_RESPONSE_DATA_KEY = "data";
     public static final String RESOURCE_KEY = "resource";
-    public static final String RESOURCE_VALUE = "user";
+    public static final String RESOURCE_USER_VALUE = "user";
+    public static final String RESOURCE_CAMPAIGN_TRACKING_VALUE = "campaign/push/tracking";
+    public static final String RESOURCE_GET_LIST_ACTION_VALUE = "get/action";
+    public static final String RESOURCE_CAMPAIGN_API_TRIGGER_VALUE = "campaign/api/trigger";
+    public static final String RESOURCE_CAMPAIGN_ACTION_TRIGGER_VALUE = "campaign/action/trigger";
+    public static final String RESOURCE_CAMPAIGN_CONVERSION_TRIGGER_VALUE = "campaign/conversion/trigger";
+    public static final String RESOURCE_NEWS_FEED_VALUE = "get/news_feed";
     public static final String METHOD_KEY = "method";
     public static final String MODE_KEY = "mode";
     public static final String MODE_KEY_REGISTER = "register";
     public static final String MODE_KEY_LOGIN = "login";
-    public static final String METHOD_VALUE = "subscribe";
+    public static final String METHOD_SUBSCRIBE_VALUE = "subscribe";
+    public static final String METHOD_SERVICE_VALUE = "service";
+    public static final String METHOD_SEND_VALUE = "send";
+    public static final String METHOD_LISTING_VALUE = "listing";
+    public static final String METHOD_LIST_VALUE = "list";
     public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
     public static final String DEFAULT_CHANNEL_TITLE = "Default Channel";
     public static final String API_RESPONSE_USER_DATA_KEY = "userData";
@@ -29,13 +39,14 @@ public class Constants {
     public static final String LOGIN_USER_ID_KEY = "user_id";
     public static final String DEFAULT_IMAGES_DIRECTORY_NAME = "drawable";
     public static final String MESSAGE_KEY_TYPE_DATA = "data";
-    public static final String MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK = "inapp_view_link";
+    public static final String MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK = "view_link";
     public static final String MESSAGE_KEY_TYPE_CAMPAIGN_TYPE = "campaign_type";
     public static final String MESSAGE_KEY_TYPE_MESSAGE_TYPE = "message_type";
     public static final String MESSAGE_KEY_TYPE_POSITION = "position";
     public static final String MESSAGE_KEY_TYPE_PUSH = "push";
+    public static final String MESSAGE_KEY_TYPE_INAPP = "inapp";
     public static final String MESSAGE_KEY_TYPE_DIALOG = "dialogue";
-    public static final String MESSAGE_KEY_TYPE_FULL_SCREEN = "full screen";
+    public static final String MESSAGE_KEY_TYPE_FULL_SCREEN = "full_screen";
     public static final String MESSAGE_KEY_TYPE_BANNER = "banner";
     public static final String POSITION_TOP = "top";
     public static final String POSITION_BOTTOM = "bottom";

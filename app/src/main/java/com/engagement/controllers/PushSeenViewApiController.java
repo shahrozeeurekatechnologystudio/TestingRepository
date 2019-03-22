@@ -8,6 +8,7 @@ import com.engagement.R;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
@@ -29,26 +30,34 @@ public class PushSeenViewApiController {
     public void hitSeenApi(UserActionsListener userActionsListener) {
         hitSeenApiRestCalls(userActionsListener);
     }
-    public void hitSeenApi(String mode,String actualUrl,UserActionsListener userActionsListener) {
-        hitSeenApiRestCalls(mode, actualUrl,userActionsListener);
+
+    public void hitSeenApi(String mode, String actualUrl, UserActionsListener userActionsListener) {
+        hitSeenApiRestCalls(mode, actualUrl, userActionsListener);
     }
-    private void hitSeenApiRestCalls(String mode,String actualUrl,UserActionsListener userActionsListener) {
+
+    private void hitSeenApiRestCalls(String mode, String actualUrl, UserActionsListener userActionsListener) {
         JSONObject params = new JSONObject();
+        ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_CAMPAIGN_TRACKING_VALUE, Constants.METHOD_SERVICE_VALUE);
         try {
             this.userActionsListener = userActionsListener;
             if (userActionsListener != null) {
                 userActionsListener.onStart();
             }
             if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
-                params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
-                if(mode!=null && !mode.equalsIgnoreCase(""))
-                {
-                    params.put("mode", mode);
+                JSONObject paramsData = new JSONObject();
+                if (EngagementSdk.getSingletonInstance() != null &&
+                        EngagementSdk.getSingletonInstance().getContext() != null &&
+                        LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                    paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 }
-                if(actualUrl!=null && !actualUrl.equalsIgnoreCase(""))
-                {
-                    params.put("action_url", actualUrl);
+                paramsData.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                if (mode != null && !mode.equalsIgnoreCase("")) {
+                    paramsData.put("mode", mode);
                 }
+                if (actualUrl != null && !actualUrl.equalsIgnoreCase("")) {
+                    paramsData.put("action_url", actualUrl);
+                }
+                params.put("data", paramsData);
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
                         params, responseListener(),
                         errorListener());
@@ -79,6 +88,7 @@ public class PushSeenViewApiController {
         }
 
     }
+
     private void hitSeenApiRestCalls(UserActionsListener userActionsListener) {
         JSONObject params = new JSONObject();
         try {
@@ -133,13 +143,13 @@ public class PushSeenViewApiController {
 
 
                     } else {
-                        if (userActionsListener != null && response.getString(Constants.API_RESPONSE_MESSAGE_KEY) != null) {
-                            userActionsListener.onError(response.getString(Constants.API_RESPONSE_MESSAGE_KEY));
+                        if (response != null && response.toString() != null) {
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.toString());
+                            }
+                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                         }
-                        if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
-                                response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
-                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
-                        }
+
 
                     }
                 } catch (Exception e) {

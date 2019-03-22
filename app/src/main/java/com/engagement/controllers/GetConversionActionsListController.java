@@ -7,6 +7,7 @@ import com.engagement.EngagementSdk;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.restkit.RestCalls;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
@@ -32,17 +33,20 @@ public class GetConversionActionsListController {
     private void getConversionActionsListControllerRestCalls(String data_type, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
-            JSONObject params = new JSONObject();
+            JSONObject jsonObjectSendToApi = new JSONObject();
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_GET_LIST_ACTION_VALUE, Constants.METHOD_LIST_VALUE);
+            JSONObject paramsData = new JSONObject();
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getContext()!= null &&
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
-                params.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
             if (data_type != null && !data_type.equalsIgnoreCase("")) {
-                params.put("data_type", data_type);
+                paramsData.put("data_type", data_type);
             }
+            jsonObjectSendToApi.put("data", paramsData);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getListTriggerEventUrl(),
-                    params, responseListener(),
+                    jsonObjectSendToApi, responseListener(),
                     errorListener());
             if (userActionsListener != null) {
                 userActionsListener.onStart();
@@ -76,12 +80,11 @@ public class GetConversionActionsListController {
 
 
                     } else {
-                        if (userActionsListener != null && response.getString(Constants.API_RESPONSE_MESSAGE_KEY) != null) {
-                            userActionsListener.onError(response.getString(Constants.API_RESPONSE_MESSAGE_KEY));
-                        }
-                        if (response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY) != null && response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0) != null &&
-                                response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString() != null) {
-                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.getJSONArray(Constants.API_RESPONSE_ERROR_KEY).get(0).toString());
+                        if (response != null && response.toString() != null) {
+                            if (userActionsListener != null) {
+                                userActionsListener.onError(response.toString());
+                            }
+                            EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                         }
 
                     }
