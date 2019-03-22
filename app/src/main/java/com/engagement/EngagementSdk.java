@@ -12,12 +12,14 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.Volley;
 import com.engagement.controllers.CampaignController;
 import com.engagement.controllers.CompanyLoginController;
+import com.engagement.controllers.LogoOutController;
 import com.engagement.controllers.UserActionController;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.restkit.ApiUrl;
+import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.UserActionsModeEnums;
 
@@ -150,8 +152,8 @@ public class EngagementSdk {
         this.engagementUser = engagementUser;
     }
 
-    public void sdkLogOut(String fcmToken, final UserActionsListener userActionsListener) {
-       /* FireBaseTokenController.sendRegistrationToServerExpireOnLogOut(fcmToken, new UserActionsListener() {
+    public void sdkLogOut(final UserActionsListener userActionsListener) {
+        LogoOutController.getSingletonInstance().logOut(new UserActionsListener() {
             @Override
             public void onStart() {
                 if(userActionsListener!=null)
@@ -175,7 +177,7 @@ public class EngagementSdk {
                     userActionsListener.onError(exception);
 
             }
-        });*/
+        });
         //sInstance = null;
         //context = null;
 
