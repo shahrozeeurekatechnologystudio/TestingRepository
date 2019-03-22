@@ -77,7 +77,7 @@ public class UserActionController {
             }
             jsonObjectParams.put("data", params);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getUserActionLink(),
-                    params, responseListener(),
+                    jsonObjectParams, responseListener(),
                     errorListener());
             if (userActionsListener != null) {
                 userActionsListener.onStart();

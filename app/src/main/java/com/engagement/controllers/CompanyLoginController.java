@@ -1,5 +1,7 @@
 package com.engagement.controllers;
 
+import android.os.Handler;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,13 +32,25 @@ public class CompanyLoginController {
         companyLoginRestCalls(userActionsListener);
     }
 
+    public void companyLoginWithDelay(int delay, final UserActionsListener userActionsListener) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    companyLoginRestCalls(userActionsListener);
+                } catch (Exception e) {
+                }
+            }
+
+        }, delay);
+    }
+
     private void companyLoginRestCalls(UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
             if (EngagementSdk.getSingletonInstance() != null &&
-                    EngagementSdk.getSingletonInstance().getContext() != null &&
-                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                    EngagementSdk.getSingletonInstance().getContext() != null) {
                 params.put("company_key", EngagementSdk.getSingletonInstance().getContext().getString(R.string.engagement_company_name));
             }
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getCompanyLoginLink(),

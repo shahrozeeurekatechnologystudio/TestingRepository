@@ -55,6 +55,7 @@ public class Constants {
     public static final String POSITION_FULL = "full";
     public static final String LOGIN_USER_SESSION_TOKEN_KEY = "authToken";
     public static final int EXPIRE_TIME = 5;
+    public static final int DELAY_TIME_TEN_THOUSANDS = 5000;
     public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
     public static final String IS_HTTPS = "https";
     public static final String IS_HTTP = "http";

@@ -20,6 +20,7 @@ import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.restkit.ApiUrl;
 import com.engagement.utils.ConstantFunctions;
+import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.UserActionsModeEnums;
 
@@ -41,7 +42,7 @@ public class EngagementSdk {
         this.isSdkLogEnable = isSdkLogEnable;
         setupActivityListener(applicationContext);
         ApiUrl.setSitePrefix(engagementSdkBaseUrl);
-        CompanyLoginController.getSingletonInstance().companyLogin(new UserActionsListener() {
+        CompanyLoginController.getSingletonInstance().companyLoginWithDelay(Constants.DELAY_TIME_TEN_THOUSANDS, new UserActionsListener() {
             @Override
             public void onStart() {
 
@@ -156,7 +157,7 @@ public class EngagementSdk {
         LogoOutController.getSingletonInstance().logOut(new UserActionsListener() {
             @Override
             public void onStart() {
-                if(userActionsListener!=null)
+                if (userActionsListener != null)
                     userActionsListener.onStart();
 
             }
@@ -165,7 +166,7 @@ public class EngagementSdk {
             public void onCompleted(JSONObject object) {
                 setEngagementUser(null);
                 ConstantFunctions.setUserDefaultNull();
-                if(userActionsListener!=null)
+                if (userActionsListener != null)
                     userActionsListener.onCompleted(object);
             }
 
@@ -173,7 +174,7 @@ public class EngagementSdk {
             public void onError(String exception) {
                 setEngagementUser(null);
                 ConstantFunctions.setUserDefaultNull();
-                if(userActionsListener!=null)
+                if (userActionsListener != null)
                     userActionsListener.onError(exception);
 
             }

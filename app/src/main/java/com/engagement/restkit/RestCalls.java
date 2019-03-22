@@ -88,7 +88,7 @@ public class RestCalls extends JsonObjectRequest {
             headers.put("Content-Type", "application/json");
             headers.put("Accept-Language",
                     "en;q=1, fr;q=0.9, de;q=0.8, zh-Hans;q=0.7, zh-Hant;q=0.6, ja;q=0.5");
-            headers.put("Authorization", LoginUserInfo.getValueForKey(Constants.LOGIN_COMPANY_SESSION_TOKEN_KEY,""));
+            headers.put("Authorization", "Bearer "+LoginUserInfo.getValueForKey(Constants.LOGIN_COMPANY_SESSION_TOKEN_KEY,""));
             PackageInfo pInfo = null;
             try {
                 pInfo = EngagementSdk.getSingletonInstance().getContext().getPackageManager().getPackageInfo(EngagementSdk.getSingletonInstance().getContext().getPackageName(), 0);
