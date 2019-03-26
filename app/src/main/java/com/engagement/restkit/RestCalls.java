@@ -98,6 +98,7 @@ public class RestCalls extends JsonObjectRequest {
             headers.put("app-build", pInfo.versionCode + "");
             headers.put("app-version", pInfo.versionName);
             headers.put("device-type", "android");
+            headers.put(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API, LoginUserInfo.getValueForKey(Constants.FIRE_BASE_DEVICE_TOKEN_KEY,""));
             headers.put("timezone", TimeZone.getDefault().getID());
             headers.put("app-id", pInfo.packageName);
             if (EngagementSdk.getSingletonInstance() != null &&

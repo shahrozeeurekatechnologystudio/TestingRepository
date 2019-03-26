@@ -63,6 +63,7 @@ public class ConstantFunctions {
     public static void setUserDefaultNull() {
         LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, null);
         LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null);
+        LoginUserInfo.setValueForKey(Constants.FIRE_BASE_DEVICE_TOKEN_KEY, null);
         LoginUserInfo.setValueForKey(Constants.LOGIN_USER_EMAIL_KEY, null);
         LoginUserInfo.setValueForKey(Constants.COMPANY_KEY, null);
         LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, null);

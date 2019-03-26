@@ -30,6 +30,8 @@ public class Constants {
     public static final String METHOD_LISTING_VALUE = "listing";
     public static final String METHOD_LIST_VALUE = "list";
     public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
+    public static final String FIRE_BASE_DEVICE_TOKEN_KEY_API = "device_token";
+    public static final String FIRE_BASE_DEVICE_TOKEN_KEY = "fire_base_device_token";
     public static final String DEFAULT_CHANNEL_TITLE = "Default Channel";
     public static final String API_RESPONSE_USER_DATA_KEY = "userData";
     public static final String API_RESPONSE_USER_EMAIL_KEY = "email";
@@ -55,7 +57,7 @@ public class Constants {
     public static final String POSITION_FULL = "full";
     public static final String LOGIN_USER_SESSION_TOKEN_KEY = "authToken";
     public static final int EXPIRE_TIME = 5;
-    public static final int DELAY_TIME_TEN_THOUSANDS = 5000;
+    public static final int DELAY_TIME_TEN_THOUSANDS = 1000;
     public static final String CLOSE_DIALOG = "http://closeme.engagement.com";
     public static final String IS_HTTPS = "https";
     public static final String IS_HTTP = "http";

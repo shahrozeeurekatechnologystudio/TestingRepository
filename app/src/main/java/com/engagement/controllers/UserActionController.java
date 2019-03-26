@@ -43,15 +43,19 @@ public class UserActionController {
                 if (engagementUser.getCompanyKey() != null
                         && !engagementUser.getCompanyKey().equalsIgnoreCase("")) {
                     LoginUserInfo.setValueForKey(Constants.COMPANY_KEY, engagementUser.getCompanyKey());
-                    if (engagementUser.getLanguage() != null
-                            && !engagementUser.getLanguage().equalsIgnoreCase("")) {
-                        LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, engagementUser.getLanguage());
-                    }
+                }
+                if (engagementUser.getLanguage() != null
+                        && !engagementUser.getLanguage().equalsIgnoreCase("")) {
+                    LoginUserInfo.setValueForKey(Constants.LANGUAGE_KEY, engagementUser.getLanguage());
+                }
+                if (engagementUser.getDeviceToken() != null
+                        && !engagementUser.getDeviceToken().equalsIgnoreCase("")) {
+                    LoginUserInfo.setValueForKey(Constants.FIRE_BASE_DEVICE_TOKEN_KEY, engagementUser.getDeviceToken());
                 }
             }
             this.userActionsListener = userActionsListener;
             JSONObject jsonObjectParams = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams,Constants.RESOURCE_USER_VALUE,Constants.METHOD_SUBSCRIBE_VALUE);
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams, Constants.RESOURCE_USER_VALUE, Constants.METHOD_SUBSCRIBE_VALUE);
             JSONObject params = new JSONObject();
             if (engagementUser != null) {
                 params.put(Constants.MODE_KEY, userActionsModeEnums);
@@ -60,7 +64,7 @@ public class UserActionController {
                 params.put("lastname", engagementUser.getLastName());
                 params.put("username", engagementUser.getUserName());
                 params.put("email", engagementUser.getEmail());
-                params.put("device_token", engagementUser.getDeviceToken());
+                params.put(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API, engagementUser.getDeviceToken());
                 params.put("is_active", engagementUser.isIsActive());
                 params.put("email_subscription", engagementUser.getEmailNotificationSubscription());
                 params.put("country", engagementUser.getCountry());
@@ -102,14 +106,20 @@ public class UserActionController {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject jsonObjectParams = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams,Constants.RESOURCE_USER_VALUE,Constants.METHOD_SUBSCRIBE_VALUE);
-            extraParams.put(Constants.MODE_KEY, userActionsModeEnums);
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams, Constants.RESOURCE_USER_VALUE, Constants.METHOD_SUBSCRIBE_VALUE);
+            if (extraParams != null && extraParams.has(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API) && extraParams.get(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API) != null && extraParams.getString(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API)!=null) {
+                LoginUserInfo.setValueForKey(Constants.FIRE_BASE_DEVICE_TOKEN_KEY, extraParams.getString(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API));
+            }
+            if (extraParams != null)
+                extraParams.put(Constants.MODE_KEY, userActionsModeEnums);
             if (EngagementSdk.getSingletonInstance() != null &&
                     EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
-                extraParams.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                if (extraParams != null)
+                    extraParams.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
-            jsonObjectParams.put("data", extraParams);
+            if (extraParams != null)
+                jsonObjectParams.put("data", extraParams);
             RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getUserActionLink(),
                     jsonObjectParams, responseListener(),
                     errorListener());
