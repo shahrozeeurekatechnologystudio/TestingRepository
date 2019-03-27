@@ -26,19 +26,23 @@ public class NewsFeedController {
         return instance;
     }
 
-    public void getNewsFeedController(String template, String latitude, String longitude, UserActionsListener userActionsListener) {
-        getNewsFeedControllerRestCalls(template, latitude, longitude, userActionsListener);
+    public void getNewsFeed(String latitude, String longitude, UserActionsListener userActionsListener) {
+        getNewsFeedRestCalls(latitude, longitude, false, userActionsListener);
     }
 
-    private void getNewsFeedControllerRestCalls(String template, String latitude, String longitude, UserActionsListener userActionsListener) {
+    public void getNewsFeedCount(String latitude, String longitude, UserActionsListener userActionsListener) {
+        getNewsFeedRestCalls(latitude, longitude, true, userActionsListener);
+    }
+
+    private void getNewsFeedRestCalls(String latitude, String longitude, boolean isFeedCount, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
             JSONObject params = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_NEWS_FEED_VALUE, Constants.METHOD_LISTING_VALUE);
+            if (isFeedCount)
+                ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_NEWS_FEED_VALUE, Constants.METHOD_COUNT_VALUE);
+            else
+                ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_NEWS_FEED_VALUE, Constants.METHOD_LISTING_VALUE);
             JSONObject paramsData = new JSONObject();
-            if (template != null && !template.equalsIgnoreCase("")) {
-                paramsData.put("template", template);
-            }
             if (EngagementSdk.getSingletonInstance() != null &&
                     EngagementSdk.getSingletonInstance().getContext() != null &&
                     LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {

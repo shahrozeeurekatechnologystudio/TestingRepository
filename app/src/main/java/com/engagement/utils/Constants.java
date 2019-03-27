@@ -30,6 +30,7 @@ public class Constants {
     public static final String METHOD_SERVICE_VALUE = "service";
     public static final String METHOD_SEND_VALUE = "send";
     public static final String METHOD_LISTING_VALUE = "listing";
+    public static final String METHOD_COUNT_VALUE = "count";
     public static final String ACTION_NOTIFICATION_VALUE = "toggleNotification";
     public static final String METHOD_LIST_VALUE = "list";
     public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
