@@ -5,6 +5,7 @@ public class Constants {
 
 
     public static final String PUSH_NOTIFICATION_ALERT = "alert";
+    public static final String PUSH_NOTIFICATION_DATA_KEY = "data";
     public static final String MESSAGE_KEY_TYPE_PLATFORM = "is_hermis_platform";
     public static final String MESSAGE_KEY_TYPE_SILENT = "is_silent";
     public static final String LOGIN_USER_EMAIL_KEY = "user_email";
@@ -35,6 +36,7 @@ public class Constants {
     public static final String METHOD_LIST_VALUE = "list";
     public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
     public static final String FIRE_BASE_DEVICE_TOKEN_KEY_API = "device_token";
+    public static final String FIRE_BASE_DEVICE_TOKEN_KEY_API_HEADER = "device-token";
     public static final String FIRE_BASE_DEVICE_TOKEN_KEY = "fire_base_device_token";
     public static final String DEFAULT_CHANNEL_TITLE = "Default Channel";
     public static final String API_RESPONSE_USER_DATA_KEY = "userData";

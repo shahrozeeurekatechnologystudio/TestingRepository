@@ -57,9 +57,11 @@ public class CampaignController {
                 if (data.containsKey(Constants.PUSH_NOTIFICATION_ALERT)
                         && data.get(Constants.PUSH_NOTIFICATION_ALERT) != null) {
                     handlePushReceivedData(context, data, notificationPayLoad, data.get(Constants.PUSH_NOTIFICATION_ALERT), cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
+                } else if (data.toString() != null && new JSONObject(data.toString()) != null &&
+                        new JSONObject(data.toString()).get(Constants.PUSH_NOTIFICATION_DATA_KEY) != null && new JSONObject(data.toString()).get(Constants.PUSH_NOTIFICATION_DATA_KEY).toString() != null) {
+                    handlePushReceivedData(context, data, notificationPayLoad, new JSONObject(data.toString()).get(Constants.PUSH_NOTIFICATION_DATA_KEY).toString(), cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
                 } else if (data.toString() != null && data.toString().split("=") != null && data.toString().split("=").length > 0 &&
                         data.toString().split("=")[1] != null) {
-
                     handlePushReceivedData(context, data, notificationPayLoad, data.toString().split("=")[1], cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
 
                 } else {
