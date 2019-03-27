@@ -7,6 +7,7 @@ public class ApiUrl {
     private static final String API_TRIGGER_LINK = "/";
     private static final String REGISTER_USER_URL = "/initialize/platform";
     private static final String NEWS_FEED_URL = "/";
+    private static final String NOTIFICATION_TOGGLE_URL = "/";
     private static final String CAMPAIGN_TRIGGER_EVENT_URL = "/";
     private static final String PUSH_TRACK_VIEW_URL = "/";
     private static final String LIST_TRIGGER_EVENT_URL = "/";
@@ -34,6 +35,10 @@ public class ApiUrl {
     public static String getNewsFeedUrl() {
 
         return getSitePrefix() + NEWS_FEED_URL;
+    }
+
+    public static String getNotificationToggleUrl() {
+        return getSitePrefix() +  NOTIFICATION_TOGGLE_URL;
     }
 
     public static String getCampaignTriggerEventUrl() {

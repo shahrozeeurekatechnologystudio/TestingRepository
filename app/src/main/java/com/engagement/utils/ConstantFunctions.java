@@ -45,6 +45,16 @@ public class ConstantFunctions {
         }
         return params;
     }
+    public static JSONObject appendCommonParameterTORequestActionForm(JSONObject params,String resource,String action) {
+        try {
+            params.put(Constants.RESOURCE_KEY, resource);
+            params.put(Constants.ACTION_KEY, action);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return params;
+    }
     public static void loadRGBImage(Context context, String path, ImageView imageView) {
         if(path != null && !path.equalsIgnoreCase(""))
             Picasso.get()

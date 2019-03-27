@@ -20,7 +20,9 @@ public class Constants {
     public static final String RESOURCE_CAMPAIGN_ACTION_TRIGGER_VALUE = "campaign/action/trigger";
     public static final String RESOURCE_CAMPAIGN_CONVERSION_TRIGGER_VALUE = "campaign/conversion/trigger";
     public static final String RESOURCE_NEWS_FEED_VALUE = "get/news_feed";
+    public static final String RESOURCE_NOTIFICATION_TOGGLE_VALUE = "notification/toggle";
     public static final String METHOD_KEY = "method";
+    public static final String ACTION_KEY = "action";
     public static final String MODE_KEY = "mode";
     public static final String MODE_KEY_REGISTER = "register";
     public static final String MODE_KEY_LOGIN = "login";
@@ -28,6 +30,7 @@ public class Constants {
     public static final String METHOD_SERVICE_VALUE = "service";
     public static final String METHOD_SEND_VALUE = "send";
     public static final String METHOD_LISTING_VALUE = "listing";
+    public static final String ACTION_NOTIFICATION_VALUE = "toggleNotification";
     public static final String METHOD_LIST_VALUE = "list";
     public static final String DEFAULT_CHANNEL_ID = "default_channel_id";
     public static final String FIRE_BASE_DEVICE_TOKEN_KEY_API = "device_token";
