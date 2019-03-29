@@ -8,6 +8,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -147,6 +149,8 @@ public class CampaignController {
             }
 
             JSONObject tempJson = null;
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            mBuilder.setSound(alarmSound);
             try {
                 tempJson = new JSONObject(messageBody);
                 if (tempJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE) != null && tempJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_PUSH)) {
@@ -187,6 +191,11 @@ public class CampaignController {
                 if (mChannel == null) {
                     mChannel = new NotificationChannel(Constants.DEFAULT_CHANNEL_ID, Constants.DEFAULT_CHANNEL_TITLE, importance);
                     mChannel.enableVibration(true);
+                    AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                            .build();
+                    mChannel.setSound(alarmSound, audioAttributes);
                     mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                     mNotificationManager.createNotificationChannel(mChannel);
                 }
