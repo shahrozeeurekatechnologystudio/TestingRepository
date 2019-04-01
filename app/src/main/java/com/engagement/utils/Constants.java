@@ -50,7 +50,7 @@ public class Constants {
     public static final String MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK = "view_link";
     public static final String MESSAGE_KEY_TYPE_CAMPAIGN_TYPE = "campaign_type";
     public static final String MESSAGE_KEY_TYPE_MESSAGE_TYPE = "message_type";
-    public static final String MESSAGE_KEY_TYPE_POSITION = "position";
+    public static final String MESSAGE_KEY_TYPE_POSITION = "message_position";
     public static final String MESSAGE_KEY_TYPE_PUSH = "push";
     public static final String MESSAGE_KEY_TYPE_INAPP = "inapp";
     public static final String MESSAGE_KEY_TYPE_DIALOG = "dialogue";
