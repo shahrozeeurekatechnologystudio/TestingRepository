@@ -91,14 +91,22 @@ public class PushSeenViewApiController {
 
     private void hitSeenApiRestCalls(UserActionsListener userActionsListener) {
         JSONObject params = new JSONObject();
+        ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_CAMPAIGN_TRACKING_VALUE, Constants.METHOD_SERVICE_VALUE);
         try {
             this.userActionsListener = userActionsListener;
             if (userActionsListener != null) {
                 userActionsListener.onStart();
             }
             if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
-                params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
-                params.put("mode", Constants.MODE_VIEWED);
+                JSONObject paramsData = new JSONObject();
+                if (EngagementSdk.getSingletonInstance() != null &&
+                        EngagementSdk.getSingletonInstance().getContext() != null &&
+                        LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                    paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                }
+                paramsData.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                paramsData.put("mode", Constants.MODE_VIEWED);
+                params.put("data", paramsData);
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
                         params, responseListener(),
                         errorListener());
