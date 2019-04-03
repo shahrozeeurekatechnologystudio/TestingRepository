@@ -13,6 +13,7 @@ import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -50,7 +51,7 @@ public class PushSeenViewApiController {
                         LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                     paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 }
-                paramsData.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                paramsData.put("track_key", new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
                 if (mode != null && !mode.equalsIgnoreCase("")) {
                     paramsData.put("mode", mode);
                 }
@@ -104,7 +105,7 @@ public class PushSeenViewApiController {
                         LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                     paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 }
-                paramsData.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""));
+                paramsData.put("track_key",  new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
                 paramsData.put("mode", Constants.MODE_VIEWED);
                 params.put("data", paramsData);
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),

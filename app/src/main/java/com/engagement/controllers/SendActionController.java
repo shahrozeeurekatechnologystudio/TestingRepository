@@ -14,6 +14,7 @@ import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
 import com.engagement.utils.LoginUserInfo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -53,7 +54,7 @@ public class SendActionController {
                 } else if (actionsEnum == ActionsEnums.CONVERSION) {
                     if(!LoginUserInfo.getValueForKey(Constants.CAMPAIGN_RECEIVE_DATE,"").equalsIgnoreCase("")
                             && !LoginUserInfo.getValueForKey(Constants.TRACK_KEY,"").equalsIgnoreCase("")) {
-                        params.put("track_key", LoginUserInfo.getValueForKey(Constants.TRACK_KEY,""));
+                        params.put("track_key",  new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
                         params.put("campaign_receive_date",LoginUserInfo.getValueForKey(Constants.CAMPAIGN_RECEIVE_DATE,""));
                         ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_CAMPAIGN_CONVERSION_TRIGGER_VALUE, Constants.METHOD_SEND_VALUE);
                         jsonObjectSendToApi.put("data", params);
