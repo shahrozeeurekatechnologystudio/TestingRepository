@@ -37,9 +37,9 @@ public class EngagementDialogBottom extends Dialog {
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            setContentView(R.layout.engagement_layout_banner_bottom);
-            CardView cardView = (CardView) findViewById(R.id.card_view_bottom_view);
-            cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
+        setContentView(R.layout.engagement_layout_banner_bottom);
+        CardView cardView = (CardView) findViewById(R.id.card_view_bottom_view);
+        cardView.getLayoutParams().height = ConstantFunctions.getHeightPixels(context) / 3;
         this.context = context;
         setThemeStyle(position);
         setScreenViews();
@@ -59,8 +59,8 @@ public class EngagementDialogBottom extends Dialog {
             window.setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
             LayoutParams lp = window.getAttributes();
             lp.width = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-                lp.gravity = Gravity.BOTTOM;
-                getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_bottom);
+            lp.gravity = Gravity.BOTTOM;
+            getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_bottom);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,11 +101,12 @@ public class EngagementDialogBottom extends Dialog {
                 super.onPageFinished(view, url);
                 show();
             }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
+                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)|| url.contains(Constants.CLOSE)) {
                     EngagementDialogBottom.this.dismiss();
-                } else  {
+                } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
@@ -113,7 +114,7 @@ public class EngagementDialogBottom extends Dialog {
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url, new UserActionsListener() {
                         @Override
                         public void onStart() {
 

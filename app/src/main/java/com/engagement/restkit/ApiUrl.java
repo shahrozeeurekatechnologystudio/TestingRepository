@@ -3,7 +3,7 @@ package com.engagement.restkit;
 public class ApiUrl {
     private static final String USER_ACTION_LINK = "/";
     private static final String COMPANY_LOGIN_LINK = "/login";
-    private static final String COMPANY_LOGOUT_LINK = "/logout";
+    private static final String COMPANY_LOGOUT_LINK = "/";
     private static final String API_TRIGGER_LINK = "/";
     private static final String REGISTER_USER_URL = "/initialize/platform";
     private static final String NEWS_FEED_URL = "/";
@@ -11,7 +11,7 @@ public class ApiUrl {
     private static final String CAMPAIGN_TRIGGER_EVENT_URL = "/";
     private static final String PUSH_TRACK_VIEW_URL = "/";
     private static final String LIST_TRIGGER_EVENT_URL = "/";
-    private static final String LIST_USER_ACTIONS_CONVERSIONS_RECORDED = "/get/user/actions";
+    private static final String LIST_USER_ACTIONS_CONVERSIONS_RECORDED = "/";
     private static final String CONVERSION_TRIGGER_EVENT_URL = "/";
     private static String SITE_PREFIX = null;
 

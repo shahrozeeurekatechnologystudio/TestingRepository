@@ -3,8 +3,6 @@ package com.engagement.models.registeruser;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONObject;
-
 public class EngagementUser implements Parcelable {
 
 
@@ -17,6 +15,7 @@ public class EngagementUser implements Parcelable {
     private String companyKey;
     private String email;
     private String deviceToken;
+    private String userToken;
     private String emailNotificationSubscription;
     private boolean isPushBannerIconHidden=true;
     private String pushNotificationBarHideTimeInMilliseconds;
@@ -359,4 +358,12 @@ public class EngagementUser implements Parcelable {
             return new EngagementUser[size];
         }
     };
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
 }

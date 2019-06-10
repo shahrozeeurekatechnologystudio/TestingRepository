@@ -56,6 +56,10 @@ public class CampaignController {
     public void setEngagementMessage(Context context, Map<String, String> data, JSONObject notificationPayLoad, Class<?> cls, int notificationStatusBarIcon, MessageActionsListener messageActionsListener, DeepLinkActionsListener deepLinkActionsListener) {
         if (data != null) {
             try {
+                //this is the user id check in order to show notification to logged in user.
+                JSONObject jsonData = new JSONObject(data.toString());
+                if (!(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, (String) null) != null && jsonData.getJSONObject("data").getString("user_id").equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, (String) null))))
+                    return;
                 if (data.containsKey(Constants.PUSH_NOTIFICATION_ALERT)
                         && data.get(Constants.PUSH_NOTIFICATION_ALERT) != null) {
                     handlePushReceivedData(context, data, notificationPayLoad, data.get(Constants.PUSH_NOTIFICATION_ALERT), cls, notificationStatusBarIcon, messageActionsListener, deepLinkActionsListener);
@@ -85,7 +89,7 @@ public class CampaignController {
                         if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, context))) {
                             try {
                                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
-                                        ) {
+                                ) {
                                     LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
                                 }
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -251,7 +255,7 @@ public class CampaignController {
                                         if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, EngagementSdk.getSingletonInstance().getContext()) != null && dataNotificationPayLoad.getString(Constants.LOGIN_USER_ID_KEY).equalsIgnoreCase(LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null, EngagementSdk.getSingletonInstance().getContext()))) {
                                             try {
                                                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
-                                                        ) {
+                                                ) {
                                                     LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
                                                 }
                                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -341,7 +345,11 @@ public class CampaignController {
                                     backgroundColor = "";
                                 }
                                 if (notificationPayLoad.has(Constants.ENGAGEMENT_PUSH_LINK_KEY) && notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY) != null) {
-                                    deepLinkUri = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY);
+                                    if (notificationJson != null && notificationJson.getJSONObject(Constants.PARAMS) != null && notificationJson.getJSONObject(Constants.PARAMS).getString(Constants.DEEP_LINK) != null) {
+                                        deepLinkUri = notificationJson.getJSONObject(Constants.PARAMS).getString(Constants.DEEP_LINK);
+                                    } else {
+                                        deepLinkUri = notificationPayLoad.getString(Constants.ENGAGEMENT_PUSH_LINK_KEY);
+                                    }
 
                                 } else {
                                     deepLinkUri = "";
@@ -421,6 +429,22 @@ public class CampaignController {
                                 } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
                                     showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
                                 }
+                                try {
+                                    String actionUrl = notificationJson.optJSONObject("params").optString("Url");
+                                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(actionUrl, new UserActionsListener() {
+                                        public void onStart() {
+                                        }
+
+                                        public void onCompleted(JSONObject object) {
+                                        }
+
+                                        public void onError(String exception) {
+                                        }
+                                    });
+                                } catch (Exception e) {
+
+                                }
+
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_FULL_SCREEN)
                                     && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
                                 showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));

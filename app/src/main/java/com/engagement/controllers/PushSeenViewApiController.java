@@ -32,6 +32,62 @@ public class PushSeenViewApiController {
         hitSeenApiRestCalls(userActionsListener);
     }
 
+    public void hitSeenApi(String actionUrl, UserActionsListener userActionsListener) {
+        hitSeenApiRestCalls(actionUrl, userActionsListener);
+    }
+
+    private void hitSeenApiRestCalls(String actionUrl, UserActionsListener userActionsListener) {
+        JSONObject params = new JSONObject();
+        ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_CAMPAIGN_TRACKING_VALUE, Constants.METHOD_SERVICE_VALUE);
+        try {
+            this.userActionsListener = userActionsListener;
+            if (userActionsListener != null) {
+                userActionsListener.onStart();
+            }
+            if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
+                JSONObject paramsData = new JSONObject();
+                if (EngagementSdk.getSingletonInstance() != null &&
+                        EngagementSdk.getSingletonInstance().getContext() != null &&
+                        LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                    paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+                }
+                paramsData.put("track_key", new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
+                paramsData.put("mode", Constants.MODE_VIEWED);
+                if (actionUrl != null && !actionUrl.equalsIgnoreCase("")) {
+                    paramsData.put("action_url", actionUrl);
+                }
+                params.put("data", paramsData);
+                RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),
+                        params, responseListener(),
+                        errorListener());
+                if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null) {
+                    EngagementSdk.getSingletonInstance().getRequestQueue().add(addActionDetailRequest);
+                }
+            } else {
+                if (userActionsListener != null) {
+                    if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getActiveActivity() != null) {
+                        userActionsListener.onError(EngagementSdk.getSingletonInstance().getActiveActivity().getResources().getString(R.string.no_campaign_receive_yet));
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            try {
+                if (e.toString() != null) {
+                    if (userActionsListener != null) {
+                        userActionsListener.onError(e.toString());
+                    }
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
     public void hitSeenApi(String mode, String actualUrl, UserActionsListener userActionsListener) {
         hitSeenApiRestCalls(mode, actualUrl, userActionsListener);
     }
@@ -105,7 +161,7 @@ public class PushSeenViewApiController {
                         LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                     paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 }
-                paramsData.put("track_key",  new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
+                paramsData.put("track_key", new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
                 paramsData.put("mode", Constants.MODE_VIEWED);
                 params.put("data", paramsData);
                 RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getPushTrackViewUrl(),

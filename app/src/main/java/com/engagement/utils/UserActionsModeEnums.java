@@ -1,7 +1,7 @@
 package com.engagement.utils;
 
 public enum UserActionsModeEnums {
-    MODE_REGISTER{
+    MODE_REGISTER {
         @Override
         public String toString() {
             return "register";
@@ -12,5 +12,11 @@ public enum UserActionsModeEnums {
         public String toString() {
             return "login";
         }
-    }
+    },
+    UPDATE {
+        @Override
+        public String toString() {
+            return "update";
+        }
+    };
 }

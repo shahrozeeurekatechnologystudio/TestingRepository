@@ -19,6 +19,7 @@ public class Constants {
     public static final String RESOURCE_GET_LIST_ACTION_VALUE = "get/action";
     public static final String RESOURCE_CAMPAIGN_API_TRIGGER_VALUE = "campaign/api/trigger";
     public static final String RESOURCE_CAMPAIGN_ACTION_TRIGGER_VALUE = "campaign/action/trigger";
+    public static final String RESOURCE_GET_USER_ACTION = "get/user/action";
     public static final String RESOURCE_CAMPAIGN_CONVERSION_TRIGGER_VALUE = "campaign/conversion/trigger";
     public static final String RESOURCE_NEWS_FEED_VALUE = "get/news_feed";
     public static final String RESOURCE_NOTIFICATION_TOGGLE_VALUE = "notification/toggle";
@@ -54,7 +55,7 @@ public class Constants {
     public static final String MESSAGE_KEY_TYPE_PUSH = "push";
     public static final String MESSAGE_KEY_TYPE_INAPP = "inapp";
     public static final String MESSAGE_KEY_TYPE_DIALOG = "dialogue";
-    public static final String MESSAGE_KEY_TYPE_FULL_SCREEN = "full_screen";
+    public static final String MESSAGE_KEY_TYPE_FULL_SCREEN = "full screen";
     public static final String MESSAGE_KEY_TYPE_BANNER = "banner";
     public static final String POSITION_TOP = "top";
     public static final String POSITION_BOTTOM = "bottom";
@@ -74,6 +75,7 @@ public class Constants {
     public static final String MODE_VIEWED_CLICKED = "both";
     public static final String MODE_VIEWED = "viewed";
     public static final String CLOSE_DIALOG_WITH_HTTPS = "https://closeme.engagement.com";
+    public static final String CLOSE = "close-me";
     public static final String COMPANY_KEY = "company_key";
     public static final String LANGUAGE_KEY = "language_key";
     public static final String ENGAGEMENT_PUSH_NOTIFICATION_DATA_PAYLOAD = "engagement_push_notification_data_payload";
@@ -89,4 +91,6 @@ public class Constants {
     public static final String ENGAGEMENT_PUSH_BACKGROUND_COLOR = "engagement_push_background_color";
 
 
+    public static final String PARAMS ="params" ;
+    public static final String DEEP_LINK ="Deep Link" ;
 }

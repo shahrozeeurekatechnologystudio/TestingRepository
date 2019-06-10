@@ -2,5 +2,7 @@ package com.engagement.utils;
 
 public enum ActionsEnums {
     ACTION,
-    CONVERSION
+    CONVERSION,
+    ACTION_TRIGGER
+
 }

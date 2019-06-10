@@ -8,12 +8,11 @@
     android:gravity="bottom"
     android:layout_gravity="bottom"
     android:clickable="true"
-    android:elevation="@dimen/d_7"
     android:background="@android:color/transparent"
     app:cardCornerRadius="@dimen/d_5"
     app:cardBackgroundColor="@color/color_white_grash"
     app:cardUseCompatPadding="true"
-    app:cardElevation="@dimen/d_7"
+    app:cardElevation="@dimen/d_1"
     >
 <RelativeLayout
     android:layout_width="match_parent"

@@ -13,7 +13,6 @@ import com.android.volley.toolbox.Volley;
 import com.engagement.controllers.CampaignController;
 import com.engagement.controllers.CompanyLoginController;
 import com.engagement.controllers.LogoOutController;
-import com.engagement.controllers.UserActionController;
 import com.engagement.interfaces.DeepLinkActionsListener;
 import com.engagement.interfaces.MessageActionsListener;
 import com.engagement.interfaces.UserActionsListener;
@@ -22,7 +21,6 @@ import com.engagement.restkit.ApiUrl;
 import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
 import com.engagement.utils.EngagementSdkLog;
-import com.engagement.utils.UserActionsModeEnums;
 
 import org.json.JSONObject;
 
@@ -63,8 +61,34 @@ public class EngagementSdk {
         });
     }
 
-    public static void sdkInitialize(Application context, String engagementSdkBaseUrl, boolean isSdkLogEnable) {
-        sInstance = new EngagementSdk(context, engagementSdkBaseUrl, isSdkLogEnable);
+    private EngagementSdk(Application applicationContext, String engagementSdkBaseUrl, String company_key, boolean isSdkLogEnable, final UserActionsListener userActionsListener) {
+        this.context = applicationContext;
+        this.isSdkLogEnable = isSdkLogEnable;
+        setupActivityListener(applicationContext);
+        ApiUrl.setSitePrefix(engagementSdkBaseUrl);
+        CompanyLoginController.getSingletonInstance().companyLoginWithDelay(Constants.DELAY_TIME_TEN_THOUSANDS, new UserActionsListener() {
+            @Override
+            public void onStart() {
+                userActionsListener.onStart();
+            }
+
+            @Override
+            public void onCompleted(JSONObject object) {
+                if (object != null && object.toString() != null)
+                    EngagementSdkLog.logDebug(EngagementSdkLog.TAG, object.toString());
+                userActionsListener.onCompleted(object);
+            }
+
+            @Override
+            public void onError(String exception) {
+                EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, exception);
+                userActionsListener.onError(exception);
+            }
+        }, company_key);
+    }
+
+    public static void sdkInitialize(Application context, String engagementSdkBaseUrl, String companyKey, boolean isSdkLogEnable,UserActionsListener userActionsListener) {
+        sInstance = new EngagementSdk(context, engagementSdkBaseUrl, companyKey, isSdkLogEnable,userActionsListener);
     }
 
     public static synchronized EngagementSdk getSingletonInstance() {
@@ -113,11 +137,11 @@ public class EngagementSdk {
         return activeActivity;
     }
 
-    public void registerEngagementUser(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
-        if (engagementUser != null)
-            this.engagementUser = engagementUser;
-        UserActionController.getSingletonInstance().hitUserAction(engagementUser, userActionsModeEnums, userActionsListener);
-    }
+//    public void registerEngagementUser(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+//        if (engagementUser != null)
+//            this.engagementUser = engagementUser;
+//        UserActionController.getSingletonInstance().hitUserAction(engagementUser, userActionsModeEnums, userActionsListener);
+//    }
 
     public RequestQueue getRequestQueue() {
         if (this.mRequestQueue == null) {
@@ -179,9 +203,6 @@ public class EngagementSdk {
 
             }
         });
-        //sInstance = null;
-        //context = null;
-
     }
 
     public Application getContext() {

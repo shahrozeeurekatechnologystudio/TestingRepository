@@ -14,40 +14,39 @@ import com.engagement.utils.LoginUserInfo;
 
 import org.json.JSONObject;
 
-import static com.engagement.utils.Constants.API_RESPONSE_USER_TOKEN_KEY;
 
-
-public class LogoOutController {
-    private static LogoOutController instance;
+public class GetConversionActionsUserListController {
+    private static GetConversionActionsUserListController instance;
     private UserActionsListener userActionsListener;
 
-    public static LogoOutController getSingletonInstance() {
+    public static GetConversionActionsUserListController getSingletonInstance() {
         if (instance == null) {
-            instance = new LogoOutController();
+            instance = new GetConversionActionsUserListController();
         }
         return instance;
     }
 
-    public void logOut(UserActionsListener userActionsListener) {
-        logOutRestCalls(userActionsListener);
+    public void getConversionActionsUserListController(String data_type, UserActionsListener userActionsListener) {
+        getConversionActionsUserListControllerRestCalls(data_type, userActionsListener);
     }
 
-    private void logOutRestCalls(UserActionsListener userActionsListener) {
+    private void getConversionActionsUserListControllerRestCalls(String data_type, UserActionsListener userActionsListener) {
         try {
             this.userActionsListener = userActionsListener;
-            JSONObject jsonObjectParams = new JSONObject();
-            ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams, Constants.RESOURCE_USER_VALUE, Constants.METHOD_SUBSCRIBE_VALUE);
-            JSONObject params = new JSONObject();
-            if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null) != null) {
-                params.put(API_RESPONSE_USER_TOKEN_KEY, LoginUserInfo.getValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null));
+            JSONObject jsonObjectSendToApi = new JSONObject();
+            ConstantFunctions.appendCommonParameterTORequest(jsonObjectSendToApi, Constants.RESOURCE_GET_USER_ACTION, Constants.METHOD_LIST_VALUE);
+            JSONObject paramsData = new JSONObject();
+            if (EngagementSdk.getSingletonInstance() != null &&
+                    EngagementSdk.getSingletonInstance().getContext() != null &&
+                    LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
+                paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
             }
-            if (LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
-                params.put(Constants.LOGIN_USER_ID_KEY, LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
+            if (data_type != null && !data_type.equalsIgnoreCase("")) {
+                paramsData.put("data_type", data_type);
             }
-            params.put(Constants.MODE_KEY, "logout");
-            jsonObjectParams.put("data", params);
-            RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getCompanyLogoutLink(),
-                    jsonObjectParams, responseListener(),
+            jsonObjectSendToApi.put("data", paramsData);
+            RestCalls addActionDetailRequest = new RestCalls(Request.Method.POST, ApiUrl.getListTriggerEventUrl(),
+                    jsonObjectSendToApi, responseListener(),
                     errorListener());
             if (userActionsListener != null) {
                 userActionsListener.onStart();
@@ -68,17 +67,6 @@ public class LogoOutController {
         }
     }
 
-    private void clearPreferences() {
-        try {
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null);
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, null);
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_EMAIL_KEY,
-                    null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private Response.Listener<JSONObject> responseListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -87,7 +75,6 @@ public class LogoOutController {
                     if (response.getJSONObject(Constants.API_RESPONSE_META_KEY).getString(Constants.API_RESPONSE_CODE_KEY).toString()
                             .equalsIgnoreCase(Constants.SERVER_OK_REQUEST_CODE)) {
                         if (userActionsListener != null) {
-                            clearPreferences();
                             userActionsListener.onCompleted(response);
                         }
 

@@ -6,12 +6,10 @@ import android.content.SharedPreferences;
 
 import com.engagement.EngagementSdk;
 
-
 public class LoginUserInfo {
 
     private static final String LOGIN_USER_PREFERENCE_NAME = "engagement_user_preferences";
     private static SharedPreferences entertainerGoUserPrefs;
-
 
     private static void initializeSharedPreferences() {
         if (entertainerGoUserPrefs == null)
@@ -67,5 +65,4 @@ public class LoginUserInfo {
         if (entertainerGoUserPrefs != null)
             entertainerGoUserPrefs.edit().putString(key, value).apply();
     }
-
 }

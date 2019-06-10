@@ -104,9 +104,9 @@ public class EngagementDialogTop extends Dialog {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
+                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS) || url.contains(Constants.CLOSE)) {
                     EngagementDialogTop.this.dismiss();
-                }else  {
+                } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
@@ -114,7 +114,7 @@ public class EngagementDialogTop extends Dialog {
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url, new UserActionsListener() {
                         @Override
                         public void onStart() {
 

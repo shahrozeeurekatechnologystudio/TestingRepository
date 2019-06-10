@@ -35,8 +35,8 @@ public class EngagementDialogBanner extends Dialog {
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
-            setContentView(R.layout.engagement_layout_message_full_screen);
-            getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        setContentView(R.layout.engagement_layout_message_full_screen);
+        getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         Window window = getWindow();
         window.setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
@@ -84,11 +84,12 @@ public class EngagementDialogBanner extends Dialog {
                 super.onPageFinished(view, url);
                 show();
             }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
+                if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS) || url.contains(Constants.CLOSE)) {
                     EngagementDialogBanner.this.dismiss();
-                } else{
+                } else {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
@@ -96,7 +97,7 @@ public class EngagementDialogBanner extends Dialog {
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url, new UserActionsListener() {
                         @Override
                         public void onStart() {
 
