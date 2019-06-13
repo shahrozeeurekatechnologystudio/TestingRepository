@@ -68,17 +68,6 @@ public class LogoOutController {
         }
     }
 
-    private void clearPreferences() {
-        try {
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_SESSION_TOKEN_KEY, null);
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, null);
-            LoginUserInfo.setValueForKey(Constants.LOGIN_USER_EMAIL_KEY,
-                    null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private Response.Listener<JSONObject> responseListener() {
         return new Response.Listener<JSONObject>() {
             @Override
@@ -87,7 +76,6 @@ public class LogoOutController {
                     if (response.getJSONObject(Constants.API_RESPONSE_META_KEY).getString(Constants.API_RESPONSE_CODE_KEY).toString()
                             .equalsIgnoreCase(Constants.SERVER_OK_REQUEST_CODE)) {
                         if (userActionsListener != null) {
-                            clearPreferences();
                             userActionsListener.onCompleted(response);
                         }
 

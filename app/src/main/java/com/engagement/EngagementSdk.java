@@ -197,7 +197,6 @@ public class EngagementSdk {
             @Override
             public void onError(String exception) {
                 setEngagementUser(null);
-                ConstantFunctions.setUserDefaultNull();
                 if (userActionsListener != null)
                     userActionsListener.onError(exception);
 
