@@ -22,6 +22,7 @@ public class Constants {
     public static final String DEFAULT_IMAGES_DIRECTORY_NAME = "drawable";
     public static final String MESSAGE_KEY_TYPE_DATA = "data";
     public static final String MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK = "inapp_view_link";
+    public static final String MESSAGE_KEY_TYPE_AUTO_CLOSE = "auto_close";
     public static final String MESSAGE_KEY_TYPE_CAMPAIGN_TYPE = "campaign_type";
     public static final String MESSAGE_KEY_TYPE_MESSAGE_TYPE = "message_type";
     public static final String MESSAGE_KEY_TYPE_POSITION = "position";

@@ -30,10 +30,12 @@ public class EngagementDialogTop extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
+    private boolean isAutoClose = true;
 
-    public EngagementDialogTop(Activity context, String msg, String position) {
+    public EngagementDialogTop(Activity context, String msg, String position, boolean isAutoClose) {
         super(context, R.style.engagement_dialog_style_animation_top);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.isAutoClose = isAutoClose;
         setCancelable(false);
         this.setCanceledOnTouchOutside(false);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -106,15 +108,19 @@ public class EngagementDialogTop extends Dialog {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(Constants.CLOSE_DIALOG) || url.startsWith(Constants.CLOSE_DIALOG_WITH_HTTPS)) {
                     EngagementDialogTop.this.dismiss();
-                }else  {
+                } else {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
+                        if (isAutoClose) {
+                            EngagementDialogTop.this.dismiss();
+                            performAction(url);
+                        } else {
+                            performAction(url);
+                        }
+
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url, new UserActionsListener() {
                         @Override
                         public void onStart() {
 
@@ -136,5 +142,11 @@ public class EngagementDialogTop extends Dialog {
             }
         };
         webViewBanner.setWebViewClient(client);
+    }
+
+    private void performAction(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        getContext().startActivity(intent);
     }
 }
