@@ -31,6 +31,8 @@ public class EngagementSdk {
     private static EngagementSdk sInstance;
     private EngagementUser engagementUser;
     private Application context;
+    private String appId;
+    private String appName;
     private boolean isSdkLogEnable;
     private Activity activeActivity;
     private RequestQueue mRequestQueue;
@@ -87,8 +89,36 @@ public class EngagementSdk {
         }, company_key);
     }
 
-    public static void sdkInitialize(Application context, String engagementSdkBaseUrl, String companyKey, boolean isSdkLogEnable,UserActionsListener userActionsListener) {
-        sInstance = new EngagementSdk(context, engagementSdkBaseUrl, companyKey, isSdkLogEnable,userActionsListener);
+    private EngagementSdk(Application applicationContext, String appName, String appId, String engagementSdkBaseUrl, String company_key, boolean isSdkLogEnable, final UserActionsListener userActionsListener) {
+        this.context = applicationContext;
+        this.isSdkLogEnable = isSdkLogEnable;
+        this.appId = appId;
+        this.appName = appName;
+        setupActivityListener(applicationContext);
+        ApiUrl.setSitePrefix(engagementSdkBaseUrl);
+        CompanyLoginController.getSingletonInstance().companyLoginWithDelay(Constants.DELAY_TIME_TEN_THOUSANDS, new UserActionsListener() {
+            @Override
+            public void onStart() {
+                userActionsListener.onStart();
+            }
+
+            @Override
+            public void onCompleted(JSONObject object) {
+                if (object != null && object.toString() != null)
+                    EngagementSdkLog.logDebug(EngagementSdkLog.TAG, object.toString());
+                userActionsListener.onCompleted(object);
+            }
+
+            @Override
+            public void onError(String exception) {
+                EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, exception);
+                userActionsListener.onError(exception);
+            }
+        }, company_key);
+    }
+
+    public static void sdkInitialize(Application context, String appName, String appId, String engagementSdkBaseUrl, String companyKey, boolean isSdkLogEnable, UserActionsListener userActionsListener) {
+        sInstance = new EngagementSdk(context, appName, appId, engagementSdkBaseUrl, companyKey, isSdkLogEnable, userActionsListener);
     }
 
     public static synchronized EngagementSdk getSingletonInstance() {
@@ -217,5 +247,13 @@ public class EngagementSdk {
             EngagementSdk.getSingletonInstance().getEngagementUser().setLatitude(latitude);
             EngagementSdk.getSingletonInstance().getEngagementUser().setLongitude(longitude);
         }
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public String getAppName() {
+        return appName;
     }
 }

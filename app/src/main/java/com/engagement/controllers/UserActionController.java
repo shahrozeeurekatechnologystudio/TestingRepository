@@ -30,22 +30,25 @@ public class UserActionController {
         return instance;
     }
 
-    public void loginEngagementUser(EngagementUser engagementUser, UserActionsListener userActionsListener) {
-        hitUserAction(engagementUser, UserActionsModeEnums.MODE_LOGIN, userActionsListener);
+    public void registerUserAndLogin(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+        hitUserAction(engagementUser, userActionsModeEnums, userActionsListener,true);
+    }
+
+    public void registerUserWithoutLogin(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+        hitUserAction(engagementUser, userActionsModeEnums, userActionsListener,false);
     }
 
     public void updateEngagementUser(EngagementUser engagementUser, UserActionsListener userActionsListener) {
-        hitUserAction(engagementUser, UserActionsModeEnums.UPDATE, userActionsListener);
+        hitUserAction(engagementUser, UserActionsModeEnums.UPDATE, userActionsListener,true);
     }
 
-    private void hitUserAction(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+    private void hitUserAction(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener,boolean isToLogin) {
         this.engagementUser = engagementUser;
         this.userActionsModeEnums = userActionsModeEnums;
-        hitUserActionRestCalls(engagementUser, userActionsModeEnums, userActionsListener);
-
+        hitUserActionRestCalls(engagementUser, userActionsModeEnums, userActionsListener,isToLogin);
     }
 
-    private void hitUserActionRestCalls(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener) {
+    private void hitUserActionRestCalls(EngagementUser engagementUser, UserActionsModeEnums userActionsModeEnums, UserActionsListener userActionsListener,boolean isToLogin) {
         try {
             if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().getContext() != null
                     && engagementUser != null) {
@@ -67,7 +70,7 @@ public class UserActionController {
             ConstantFunctions.appendCommonParameterTORequest(jsonObjectParams, Constants.RESOURCE_USER_VALUE, Constants.METHOD_SUBSCRIBE_VALUE);
             JSONObject params = new JSONObject();
             if (UserActionsModeEnums.MODE_REGISTER == userActionsModeEnums) {
-                params.put("is_logged_in", false);
+                params.put("is_logged_in", isToLogin);
                 params.put("extra_params", null);
 
             }
@@ -94,7 +97,6 @@ public class UserActionController {
                     }
                     params.put("extra_params", extraParams);
                 } else {
-
                     params.put("firstname", engagementUser.getFirstName());
                     params.put("lastname", engagementUser.getLastName());
                     params.put("username", engagementUser.getUserName());
@@ -203,13 +205,13 @@ public class UserActionController {
                         } else {
                             if (response != null && response.toString() != null) {
                                 //User Not Found case 404.
-                                if (response.getJSONObject(Constants.API_RESPONSE_META_KEY).optInt(Constants.API_RESPONSE_CODE_KEY) == 404) {
+                                /*if (response.getJSONObject(Constants.API_RESPONSE_META_KEY).optInt(Constants.API_RESPONSE_CODE_KEY) == 404) {
                                     hitUserAction(engagementUser, UserActionsModeEnums.MODE_REGISTER, userActionsListener);
-                                } else {
-                                    if (userActionsListener != null) {
-                                        userActionsListener.onError(response.toString());
-                                    }
+                                } else {*/
+                                if (userActionsListener != null) {
+                                    userActionsListener.onError(response.toString());
                                 }
+                                /* }*/
                                 EngagementSdkLog.logDebug(EngagementSdkLog.TAG_VOLLEY_ERROR, response.toString());
                             }
 
@@ -227,7 +229,10 @@ public class UserActionController {
                                     && response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).get(Constants.LOGIN_USER_ID_KEY).toString() != null) {
                                 LoginUserInfo.setValueForKey(Constants.LOGIN_USER_ID_KEY, response.getJSONObject(Constants.API_RESPONSE_DATA_KEY).get(Constants.LOGIN_USER_ID_KEY).toString());
                             }
-                            hitUserAction(engagementUser, UserActionsModeEnums.MODE_LOGIN, userActionsListener);
+                            /*hitUserAction(engagementUser, UserActionsModeEnums.MODE_LOGIN, userActionsListener);*/
+                            if (userActionsListener != null) {
+                                userActionsListener.onCompleted(response);
+                            }
                         } else {
                             if (response != null && response.toString() != null) {
                                 if (userActionsListener != null) {

@@ -101,7 +101,14 @@ public class RestCalls extends JsonObjectRequest {
             headers.put("device-type", "android");
             headers.put(Constants.FIRE_BASE_DEVICE_TOKEN_KEY_API_HEADER, LoginUserInfo.getValueForKey(Constants.FIRE_BASE_DEVICE_TOKEN_KEY, ""));
             headers.put("timezone", TimeZone.getDefault().getID());
-            headers.put("app-id", pInfo.packageName);
+            String appId = EngagementSdk.getSingletonInstance().getAppId();
+            String appName = EngagementSdk.getSingletonInstance().getAppName();
+            if (appId != null) {
+                headers.put("app-id", appId);
+            } else {
+                headers.put("app-id", pInfo.packageName);
+            }
+
             if (EngagementSdk.getSingletonInstance() != null &&
                     EngagementSdk.getSingletonInstance().getContext() != null &&
                     !LoginUserInfo.getValueForKey(Constants.LANGUAGE_KEY, "").equalsIgnoreCase("")) {
@@ -109,7 +116,11 @@ public class RestCalls extends JsonObjectRequest {
             } else {
                 headers.put("lang", Locale.getDefault().getLanguage());
             }
-            headers.put("app-name", EngagementSdk.getSingletonInstance().getContext().getString(R.string.app_name));
+            if (appName != null) {
+                headers.put("app-name", appName);
+            } else {
+                headers.put("app-name", EngagementSdk.getSingletonInstance().getContext().getString(R.string.app_name));
+            }
             if (EngagementSdk.getSingletonInstance() != null && EngagementSdk.getSingletonInstance().isSdkLogEnable()) {
                 Log.e("Header", headers.toString());
                 for (String key :
