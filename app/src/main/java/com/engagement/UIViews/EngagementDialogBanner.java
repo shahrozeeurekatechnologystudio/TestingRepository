@@ -28,12 +28,14 @@ public class EngagementDialogBanner extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
+    private boolean isAutoClose;
 
-    public EngagementDialogBanner(Activity context, String msg, String displyType) {
+    public EngagementDialogBanner(Activity context, String msg, String displyType, boolean isAutoClose) {
         super(context, R.style.engagement_dialog_style_animation_banner);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
+        this.isAutoClose = isAutoClose;
         this.setCanceledOnTouchOutside(false);
         setContentView(R.layout.engagement_layout_message_full_screen);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -51,6 +53,13 @@ public class EngagementDialogBanner extends Dialog {
         setScreenValues(msg);
     }
 
+
+
+    private void performAction(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        getContext().startActivity(intent);
+    }
     @SuppressLint("SetJavaScriptEnabled")
     private void setScreenViews() {
         webViewBanner = (WebView) findViewById(R.id.webView_msg_center);
@@ -91,9 +100,12 @@ public class EngagementDialogBanner extends Dialog {
                     EngagementDialogBanner.this.dismiss();
                 } else {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
+                        if (isAutoClose) {
+                            EngagementDialogBanner.this.dismiss();
+                            performAction(url);
+                        } else {
+                            performAction(url);
+                        }
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }

@@ -93,4 +93,5 @@ public class Constants {
 
     public static final String PARAMS ="params" ;
     public static final String DEEP_LINK ="Deep Link" ;
+    public static final String MESSAGE_KEY_TYPE_AUTO_CLOSE = "auto_close";
 }

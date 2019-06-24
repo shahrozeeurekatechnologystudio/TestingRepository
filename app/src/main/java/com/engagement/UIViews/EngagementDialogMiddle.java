@@ -30,12 +30,14 @@ public class EngagementDialogMiddle extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
+    private boolean isAutoClose;
 
-    public EngagementDialogMiddle(Activity context, String msg, String displyType) {
+    public EngagementDialogMiddle(Activity context, String msg, String displyType,boolean isAutoClose) {
         super(context, R.style.engagement_dialog_style_animation_middle);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
+        this.isAutoClose = isAutoClose;
         this.setCanceledOnTouchOutside(false);
         setContentView(R.layout.engagement_layout_message_center);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -74,6 +76,13 @@ public class EngagementDialogMiddle extends Dialog {
         });
     }
 
+
+    private void performAction(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        getContext().startActivity(intent);
+    }
+
     private void setScreenValues(String msg) {
         if (msg != null) {
             //webViewBanner.loadDataWithBaseURL(null, msg, "text/html", "utf-8", null);
@@ -95,9 +104,12 @@ public class EngagementDialogMiddle extends Dialog {
                     EngagementDialogMiddle.this.dismiss();
                 }else  {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
+                        if (isAutoClose) {
+                            EngagementDialogMiddle.this.dismiss();
+                            performAction(url);
+                        } else {
+                            performAction(url);
+                        }
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }

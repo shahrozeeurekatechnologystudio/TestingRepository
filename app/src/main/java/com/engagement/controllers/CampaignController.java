@@ -420,37 +420,38 @@ public class CampaignController {
                                 }
                             }
                         } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_INAPP)) {
-                            if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG)
-                                    && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
+                            if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG) && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
                                 if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_TOP)) {
-                                    showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                    showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
                                 } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_BOTTOM)) {
-                                    showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                    showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
                                 } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
-                                    showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
-                                }
-                                try {
-                                    String actionUrl = notificationJson.optJSONObject("params").optString("Url");
-                                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(actionUrl, new UserActionsListener() {
-                                        public void onStart() {
-                                        }
-
-                                        public void onCompleted(JSONObject object) {
-                                        }
-
-                                        public void onError(String exception) {
-                                        }
-                                    });
-                                } catch (Exception e) {
-
+                                    showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
                                 }
 
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_FULL_SCREEN)
                                     && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                                showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_BANNER)
                                     && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                                showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK));
+                                showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                            }
+                            // todo hit view api.
+
+                            try {
+                                String actionUrl = notificationJson.optJSONObject("params").optString("Url");
+                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(actionUrl, new UserActionsListener() {
+                                    public void onStart() {
+                                    }
+
+                                    public void onCompleted(JSONObject object) {
+                                    }
+
+                                    public void onError(String exception) {
+                                    }
+                                });
+                            } catch (Exception e) {
+
                             }
                         }
                     }
@@ -462,45 +463,45 @@ public class CampaignController {
     }
 
 
-    private void showTopBanner(final Activity context, final String msg) {
+    private void showTopBanner(final Activity context, final String msg,final boolean auto_close) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogTop(context, msg, Constants.POSITION_TOP);
+                new EngagementDialogTop(context, msg, Constants.POSITION_TOP,auto_close);
             }
         });
 
     }
 
-    private void showBottomBanner(final Activity context, final String msg) {
+    private void showBottomBanner(final Activity context, final String msg,final boolean auto_close) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogBottom(context, msg, Constants.POSITION_BOTTOM);
+                new EngagementDialogBottom(context, msg, Constants.POSITION_BOTTOM,auto_close);
             }
         });
 
     }
 
-    private void showMiddleBanner(final Activity context, final String msg) {
+    private void showMiddleBanner(final Activity context, final String msg,final boolean auto_close) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogMiddle(context, msg, Constants.POSITION_MIDDLE);
+                new EngagementDialogMiddle(context, msg, Constants.POSITION_MIDDLE,auto_close);
             }
         });
     }
 
-    private void showFullScreen(final Activity context, final String msg) {
+    private void showFullScreen(final Activity context, final String msg,final boolean auto_close) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogFullScreen(context, msg, Constants.POSITION_FULL);
+                new EngagementDialogFullScreen(context, msg, Constants.POSITION_FULL,auto_close);
             }
         });
 
     }
 
-    private void showBanner(final Activity context, final String msg) {
+    private void showBanner(final Activity context, final String msg, final boolean auto_close) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogBanner(context, msg, Constants.POSITION_FULL);
+                new EngagementDialogBanner(context, msg, Constants.POSITION_FULL,auto_close);
             }
         });
 

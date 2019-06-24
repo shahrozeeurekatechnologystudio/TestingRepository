@@ -30,11 +30,13 @@ public class EngagementDialogBottom extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
+    private boolean isAutoClose;
 
-    public EngagementDialogBottom(Activity context, String msg, String position) {
+    public EngagementDialogBottom(Activity context, String msg, String position,boolean isAutoClose) {
         super(context, R.style.engagement_dialog_style_animation_bottom);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
+        this.isAutoClose = isAutoClose;
         this.setCanceledOnTouchOutside(false);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         setContentView(R.layout.engagement_layout_banner_bottom);
@@ -45,6 +47,12 @@ public class EngagementDialogBottom extends Dialog {
         setScreenViews();
         setWebViewClient();
         setScreenValues(msg);
+    }
+
+    private void performAction(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        getContext().startActivity(intent);
     }
 
     private void setThemeStyle(String position) {
@@ -108,9 +116,12 @@ public class EngagementDialogBottom extends Dialog {
                     EngagementDialogBottom.this.dismiss();
                 } else {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
+                        if (isAutoClose) {
+                            EngagementDialogBottom.this.dismiss();
+                            performAction(url);
+                        } else {
+                            performAction(url);
+                        }
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
