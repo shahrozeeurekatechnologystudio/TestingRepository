@@ -88,11 +88,12 @@ public class PushSeenViewApiController {
 
     }
 
-    public void hitSeenApi(String mode, String actualUrl, UserActionsListener userActionsListener) {
-        hitSeenApiRestCalls(mode, actualUrl, userActionsListener);
+    //todo add track key param
+    public void hitSeenApi(String mode, String actualUrl,String trackKey, UserActionsListener userActionsListener) {
+        hitSeenApiRestCalls(mode, actualUrl,trackKey, userActionsListener);
     }
 
-    private void hitSeenApiRestCalls(String mode, String actualUrl, UserActionsListener userActionsListener) {
+    private void hitSeenApiRestCalls(String mode, String actualUrl,String trackKey, UserActionsListener userActionsListener) {
         JSONObject params = new JSONObject();
         ConstantFunctions.appendCommonParameterTORequest(params, Constants.RESOURCE_CAMPAIGN_TRACKING_VALUE, Constants.METHOD_SERVICE_VALUE);
         try {
@@ -107,7 +108,11 @@ public class PushSeenViewApiController {
                         LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null) != null) {
                     paramsData.put("user_id", LoginUserInfo.getValueForKey(Constants.LOGIN_USER_ID_KEY, null));
                 }
-                paramsData.put("track_key", new JSONArray(LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")));
+                //LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "")
+                if (!trackKey.isEmpty() && trackKey != null){
+                    paramsData.put("track_key", new JSONArray(trackKey));
+                }
+
                 if (mode != null && !mode.equalsIgnoreCase("")) {
                     paramsData.put("mode", mode);
                 }

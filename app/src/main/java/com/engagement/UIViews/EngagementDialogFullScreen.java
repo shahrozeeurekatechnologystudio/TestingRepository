@@ -28,12 +28,16 @@ public class EngagementDialogFullScreen extends Dialog {
 
     private WebView webViewBanner;
     private Context context;
+    private  boolean isAutoClose;
+    private String trackKey;
 
-    public EngagementDialogFullScreen(Activity context, String msg, String displyType) {
+    public EngagementDialogFullScreen(Activity context, String msg, String displyType, boolean isAutoClose,String trackKey) {
         super(context, R.style.engagement_dialog_style_animation_full_screen);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setWindowAnimations(R.style.engagement_translateDialogAnimation_slow_top);
         setCancelable(false);
+        this.isAutoClose = isAutoClose;
+        this.trackKey = trackKey;
         this.setCanceledOnTouchOutside(false);
             setContentView(R.layout.engagement_layout_message_full_screen);
             getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -49,6 +53,13 @@ public class EngagementDialogFullScreen extends Dialog {
         setScreenViews();
         setWebViewClient();
         setScreenValues(msg);
+    }
+
+
+    private void performAction(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        getContext().startActivity(intent);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -90,13 +101,16 @@ public class EngagementDialogFullScreen extends Dialog {
                     EngagementDialogFullScreen.this.dismiss();
                 } else  {
                     try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        getContext().startActivity(intent);
+                        if (isAutoClose) {
+                            EngagementDialogFullScreen.this.dismiss();
+                            performAction(url);
+                        } else {
+                            performAction(url);
+                        }
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,url,trackKey,new UserActionsListener() {
                         @Override
                         public void onStart() {
 
