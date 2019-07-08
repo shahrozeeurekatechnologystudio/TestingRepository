@@ -24,6 +24,7 @@ import com.engagement.interfaces.UserActionsListener;
 import com.engagement.models.registeruser.EngagementUser;
 import com.engagement.utils.ConstantFunctions;
 import com.engagement.utils.Constants;
+import com.engagement.utils.LoginUserInfo;
 
 import org.json.JSONObject;
 
@@ -165,22 +166,24 @@ public class EngagementDialogPushNotification extends Dialog implements View.OnC
             if (deepLinkUri != null && !deepLinkUri.equalsIgnoreCase("")) {
                 if (deepLinkActionsListener != null) {
                     deepLinkActionsListener.onDeepLinkReturn(deepLinkUri.trim());
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,deepLinkUri,new UserActionsListener() {
-                        @Override
-                        public void onStart() {
+                    if (!LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")){
+                        PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED,deepLinkUri, LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""),new UserActionsListener() {
+                            @Override
+                            public void onStart() {
 
-                        }
+                            }
 
-                        @Override
-                        public void onCompleted(JSONObject object) {
+                            @Override
+                            public void onCompleted(JSONObject object) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onError(String exception) {
+                            @Override
+                            public void onError(String exception) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                     dismiss();
                 }
             }

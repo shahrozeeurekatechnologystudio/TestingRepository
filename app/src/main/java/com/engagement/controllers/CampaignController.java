@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.engagement.EngagementSdk;
 import com.engagement.R;
@@ -44,6 +45,7 @@ public class CampaignController {
 
 
     private static CampaignController instance;
+    private String trackKey;
 
 
     public static CampaignController getSingletonInstance() {
@@ -91,6 +93,7 @@ public class CampaignController {
                                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
                                 ) {
                                     LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
+                                    trackKey = dataNotificationPayLoad.getString(Constants.TRACK_KEY);
                                 }
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                 LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
@@ -161,16 +164,18 @@ public class CampaignController {
                     if (tempJson.getString(Constants.MESSAGE_KEY_TYPE_DATA) != null)
                         mBuilder.setContentText(tempJson.getString(Constants.MESSAGE_KEY_TYPE_DATA));
                     else
-                        mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
+                        //context.getResources().getString(R.string.notification_alert_without_push)
+                        mBuilder.setContentText(messageBody);
                 } else {
-                    mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
+                    mBuilder.setContentText(messageBody);
                 }
             } catch (Exception e) {
-                mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
+                mBuilder.setContentText(messageBody);
             }
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mBuilder.setSmallIcon(notificationStatusBarIcon);
-                mBuilder.setColor(context.getResources().getColor(R.color.color_primary));
+                //mBuilder.setColor(ContextCompat.getColor(context,R.color.color_primary));
+
             } else {
                 mBuilder.setSmallIcon(notificationStatusBarIcon);
             }
@@ -257,6 +262,7 @@ public class CampaignController {
                                                 if (dataNotificationPayLoad != null && dataNotificationPayLoad.has(Constants.TRACK_KEY) && dataNotificationPayLoad.get(Constants.TRACK_KEY) != null && dataNotificationPayLoad.getString(Constants.TRACK_KEY) != null
                                                 ) {
                                                     LoginUserInfo.setValueForKey(Constants.TRACK_KEY, dataNotificationPayLoad.getString(Constants.TRACK_KEY));
+                                                    trackKey = dataNotificationPayLoad.getString(Constants.TRACK_KEY);
                                                 }
                                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                                                 LoginUserInfo.setValueForKey(Constants.CAMPAIGN_RECEIVE_DATE, simpleDateFormat.format(new Date()));
@@ -264,8 +270,8 @@ public class CampaignController {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
-                                            if (intent != null && intent.getData() != null && intent.getData().getHost() != null && intent.getData().toString() != null) {
-                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_VIEWED_CLICKED, intent.getData().toString(), new UserActionsListener() {
+                                            if (intent != null && intent.getData() != null && intent.getData().getHost() != null && intent.getData().toString() != null && !LoginUserInfo.getValueForKey(Constants.TRACK_KEY, "").equalsIgnoreCase("")) {
+                                                PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_VIEWED_CLICKED, intent.getData().toString(),LoginUserInfo.getValueForKey(Constants.TRACK_KEY, ""), new UserActionsListener() {
                                                     @Override
                                                     public void onStart() {
 
@@ -422,19 +428,19 @@ public class CampaignController {
                         } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_CAMPAIGN_TYPE).equals(Constants.MESSAGE_KEY_TYPE_INAPP)) {
                             if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_DIALOG) && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
                                 if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_TOP)) {
-                                    showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                                    showTopBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true),trackKey);
                                 } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_BOTTOM)) {
-                                    showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                                    showBottomBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true),trackKey);
                                 } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_POSITION).equals(Constants.POSITION_MIDDLE)) {
-                                    showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                                    showMiddleBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true),trackKey);
                                 }
 
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_FULL_SCREEN)
                                     && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                                showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                                showFullScreen(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true),trackKey);
                             } else if (notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE) != null && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_MESSAGE_TYPE).equals(Constants.MESSAGE_KEY_TYPE_BANNER)
                                     && notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK) != null) {
-                                showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true));
+                                showBanner(EngagementSdk.getSingletonInstance().getActiveActivity(), notificationJson.getString(Constants.MESSAGE_KEY_TYPE_IN_APP_VIEW_LINK),notificationJson.optBoolean(Constants.MESSAGE_KEY_TYPE_AUTO_CLOSE,true),trackKey);
                             }
                             // todo hit view api.
 
@@ -463,45 +469,45 @@ public class CampaignController {
     }
 
 
-    private void showTopBanner(final Activity context, final String msg,final boolean auto_close) {
+    private void showTopBanner(final Activity context, final String msg, final boolean auto_close, final String trackKey) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogTop(context, msg, Constants.POSITION_TOP,auto_close);
+                new EngagementDialogTop(context, msg, Constants.POSITION_TOP,auto_close,trackKey);
             }
         });
 
     }
 
-    private void showBottomBanner(final Activity context, final String msg,final boolean auto_close) {
+    private void showBottomBanner(final Activity context, final String msg,final boolean auto_close, final String trackKey) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogBottom(context, msg, Constants.POSITION_BOTTOM,auto_close);
+                new EngagementDialogBottom(context, msg, Constants.POSITION_BOTTOM,auto_close,trackKey);
             }
         });
 
     }
 
-    private void showMiddleBanner(final Activity context, final String msg,final boolean auto_close) {
+    private void showMiddleBanner(final Activity context, final String msg,final boolean auto_close, final String trackKey) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogMiddle(context, msg, Constants.POSITION_MIDDLE,auto_close);
+                new EngagementDialogMiddle(context, msg, Constants.POSITION_MIDDLE,auto_close,trackKey);
             }
         });
     }
 
-    private void showFullScreen(final Activity context, final String msg,final boolean auto_close) {
+    private void showFullScreen(final Activity context, final String msg,final boolean auto_close, final String trackKey) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogFullScreen(context, msg, Constants.POSITION_FULL,auto_close);
+                new EngagementDialogFullScreen(context, msg, Constants.POSITION_FULL,auto_close,trackKey);
             }
         });
 
     }
 
-    private void showBanner(final Activity context, final String msg, final boolean auto_close) {
+    private void showBanner(final Activity context, final String msg, final boolean auto_close, final String trackKey) {
         context.runOnUiThread(new Runnable() {
             public void run() {
-                new EngagementDialogBanner(context, msg, Constants.POSITION_FULL,auto_close);
+                new EngagementDialogBanner(context, msg, Constants.POSITION_FULL,auto_close,trackKey);
             }
         });
 

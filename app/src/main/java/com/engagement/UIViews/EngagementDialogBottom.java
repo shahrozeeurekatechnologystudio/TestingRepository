@@ -31,12 +31,14 @@ public class EngagementDialogBottom extends Dialog {
     private WebView webViewBanner;
     private Context context;
     private boolean isAutoClose;
+    private String trackKey;
 
-    public EngagementDialogBottom(Activity context, String msg, String position,boolean isAutoClose) {
+    public EngagementDialogBottom(Activity context, String msg, String position,boolean isAutoClose,String trackKey) {
         super(context, R.style.engagement_dialog_style_animation_bottom);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
         this.isAutoClose = isAutoClose;
+        this.trackKey = trackKey;
         this.setCanceledOnTouchOutside(false);
         getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         setContentView(R.layout.engagement_layout_banner_bottom);
@@ -125,7 +127,7 @@ public class EngagementDialogBottom extends Dialog {
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
-                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url, new UserActionsListener() {
+                    PushSeenViewApiController.getSingletonInstance().hitSeenApi(Constants.MODE_CLICKED, url,trackKey, new UserActionsListener() {
                         @Override
                         public void onStart() {
 
