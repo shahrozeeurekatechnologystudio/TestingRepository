@@ -164,13 +164,12 @@ public class CampaignController {
                     if (tempJson.getString(Constants.MESSAGE_KEY_TYPE_DATA) != null)
                         mBuilder.setContentText(tempJson.getString(Constants.MESSAGE_KEY_TYPE_DATA));
                     else
-                        //context.getResources().getString(R.string.notification_alert_without_push)
-                        mBuilder.setContentText(messageBody);
+                        mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
                 } else {
-                    mBuilder.setContentText(messageBody);
+                    mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
                 }
             } catch (Exception e) {
-                mBuilder.setContentText(messageBody);
+                mBuilder.setContentText(context.getResources().getString(R.string.notification_alert_without_push));
             }
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mBuilder.setSmallIcon(notificationStatusBarIcon);
