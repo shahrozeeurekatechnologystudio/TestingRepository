@@ -1,6 +1,20 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.<shahrozeeurekatechnologystudio>'
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+
+    def groupProjectID = 'com.engagement'
+    def artifactProjectID = 'engagement'
+    def publishVersionID = '0.1'
+
+    userOrg = 'shahrozeeurekatechnologystudio'
+    repoName = 'Hermes'
+    groupId = groupProjectID
+    artifactId = artifactProjectID
+    publishVersion = publishVersionID
+    desc = 'Hermis Platform'
+    website = 'https://github.com/shahrozeeurekatechnologystudio/engagement_sdk_android'
+}
 android {
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
